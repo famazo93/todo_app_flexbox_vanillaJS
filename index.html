@@ -11,29 +11,30 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="./style.css">
-        <link rel="script" href="./main.js">
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         
-        <div class="container">
-            <div class="todo">
+        <div class="container" id="container-field">
+            <div class="todo" id="add-todo">
                 <div class="title">What do you want to accomplish next?</div>
-                <input type="text" id="new-task" name="new-task" placeholder="Describe your new task">
-                <input type="date" id="task-deadline" name="task-deadline">
-                <select name="priority" id="priority" class="dropdown">
-                    <option value="high">High</option>
-                    <option value="medium">Medium</option>
-                    <option value="low">Low</option>
-                </select>
-                <button id="submit">Add Task</button>
+                <form id="input-form" onsubmit="submitTask()">
+                    <input type="text" id="new-task" name="new-task" placeholder="Describe your new task">
+                    <input type="date" id="task-deadline" name="task-deadline">
+                    <select name="priority" id="priority" class="dropdown">
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                    <input type="submit" value="Add task" id="submit" />
+                </form>
             </div>
         </div>
 
 
 
-
+        <script src="./main.js" async defer></script>
     </body>
 </html>
