@@ -11,17 +11,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    min-height: 100%;
     width: 100%;
 }
 
 .container {
     width: 70%;
-    height: 90%;
+    max-height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    overflow-y: auto;
 }
 
 .todo {
@@ -30,7 +30,8 @@ body {
     border: 1px black solid;
     border-radius: 5px;
     padding: 10px;
-    margin: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
     background-color: darkorange;
 }
 
@@ -75,7 +76,7 @@ body {
 [id^="remove"] {
     font-size: 10px;
     color: white;
-    background-color: darkred;
+    background-color: darkolivegreen;
     border: 2px white solid;
     border-radius: 3px;
 }

@@ -8,7 +8,7 @@ const todoElement = (text, date, prio) => {
                 <div class="todo-text">${text}</div>
                 <div class="todo-date">${date}</div>
                 <div class="todo-prio">${prio}</div>
-                <button id="remove-${taskCounter}">X</button>
+                <button id="remove-${taskCounter}">\u2713</button>
             </div>`
 };
 
@@ -42,5 +42,5 @@ const submit = document.getElementById('submit');
 submit.addEventListener('click', submitTask);
 
 // this is only here for the test task
-const remove = document.getElementById('remove');
-remove.addEventListener('click', removeTask);
+// const remove = document.getElementById('remove');
+// remove.addEventListener('click', removeTask);
