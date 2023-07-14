@@ -1,0 +1,37 @@
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+html {
+    height: 600px;
+}
+
+body {
+    background-color: beige;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.container {
+    width: 70%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.todo {
+    width: 70%;
+    height: auto;
+    border: 1px black solid;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: darkorange;
+}
+
+.todo > * {
+    margin: 3px;
+}
