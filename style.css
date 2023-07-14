@@ -34,6 +34,60 @@ body {
     background-color: darkorange;
 }
 
+.todo.added {
+    width: 70%;
+    height: auto;
+    border: 1px black solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    background-color: darkorange;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .todo > * {
     margin: 3px;
+    vertical-align: middle;
+}
+
+.todo.added {
+    background-color: rgb(255, 209, 124);
+}
+
+.todo-text,
+.todo-date,
+.todo-prio,
+.todo-remove {
+    display: inline-block;
+}
+
+.todo-text {
+    width: 50%;
+}
+
+.todo-date,
+.todo-prio {
+    font-size: 12px;
+}
+
+#remove {
+    font-size: 10px;
+    color: white;
+    background-color: darkred;
+    border: 2px white solid;
+    border-radius: 3px;
+}
+
+#remove:hover {
+    background-color: lightblue;
+    color: black;
+}
+
+#remove:active {
+    position: relative;
+    top: 1px;
+    left: 1px;
+    background-color:dimgray
 }
