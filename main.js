@@ -50,22 +50,17 @@ const removeTask = (event) => {
 
     let indexToRemove = 0;
     for (task of taskList) {
-        console.log(`Looking for: ${id}.`);
-        console.log(`Looking at: ${task.id}`)
         if (task.id === id) {
             indexToRemove = taskList.indexOf(task);
-            console.log(indexToRemove);
         };
     }
     
     taskList.splice(indexToRemove, 1);
-    console.log(taskList);
     let newTasksJSON = JSON.stringify(taskList);
     localStorage.setItem('tasks', `${newTasksJSON}`);
 
     const toRemove = document.getElementById(id);
     toRemove.remove();
-    console.log(localStorage.getItem('tasks'));
 }
 
 const submit = document.getElementById('submit');
