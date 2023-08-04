@@ -58,21 +58,13 @@ const addTask = async (event) => {
 const fetchedTaskList = await fetchTasks();
 const taskList = fetchedTaskList.todo;
 
-const removeTask = (event) => {
+const removeTask = async (event) => {
     event.preventDefault();
     const id = event.target.parentElement.id;
-
-    let indexToRemove = 0;
-    for (task of taskList) {
-        if (task.id === id) {
-            indexToRemove = taskList.indexOf(task);
-        };
-    }
-    
-    taskList.splice(indexToRemove, 1);
-    let newTasksJSON = JSON.stringify(taskList);
-    localStorage.setItem('tasks', `${newTasksJSON}`);
-
+    console.log(id);
+    const response = await fetch(`http://localhost:3000/todo/${id}`, {
+        method: 'DELETE',
+    });
     const toRemove = document.getElementById(id);
     toRemove.remove();
 }

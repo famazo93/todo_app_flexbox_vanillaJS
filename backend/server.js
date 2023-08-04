@@ -25,8 +25,17 @@ app.post('/todo', (req, res, next) => {
     console.log('Adding task');
     const task = req.body;
     todo.todo.push(task);
+    res.send(todo);
 })
 
+app.delete('/todo/:id', (req, res, next) => {
+    const id = Number(req.params.id);
+    console.log(`Removing task with ID: ${id}`);
+    const indexToRemove = todo.todo.findIndex(task => Number(task.id) === Number(id));
+    console.log(indexToRemove);
+    todo.todo.splice(indexToRemove, 1);
+    res.send(todo);
+})
 
 
 
