@@ -5,6 +5,15 @@ const todoField = document.getElementById('container-field');
 let rawTaskList = localStorage.getItem('tasks');
 let taskList = JSON.parse(rawTaskList) ? JSON.parse(rawTaskList) : [];
 
+const fetchTasks = async () => {
+    const response = await fetch('http://localhost:3000/todo');
+    const todos = await response.json();
+    return todos;
+}
+
+const fetchedTaskList = await fetchTasks();
+console.log(fetchedTaskList);
+
 const todoElement = (id, text, date, prio) => {
     return `<div class="todo added" id="${id}">
     <div class="todo-text">${text}</div>
