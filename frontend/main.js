@@ -1,19 +1,6 @@
 
 const todoField = document.getElementById('container-field');
 
-// i will need to read the local storage here to initialize the right tasks
-let rawTaskList = localStorage.getItem('tasks');
-let taskList = JSON.parse(rawTaskList) ? JSON.parse(rawTaskList) : [];
-
-const fetchTasks = async () => {
-    const response = await fetch('http://localhost:3000/todo');
-    const todos = await response.json();
-    return todos;
-}
-
-const fetchedTaskList = await fetchTasks();
-console.log(fetchedTaskList);
-
 const todoElement = (id, text, date, prio) => {
     return `<div class="todo added" id="${id}">
     <div class="todo-text">${text}</div>
@@ -23,12 +10,18 @@ const todoElement = (id, text, date, prio) => {
     </div>`
 };
 
-const submitTask = (event) => {
+const fetchTasks = async () => {
+    const response = await fetch('http://localhost:3000/todo');
+    const todos = await response.json();
+    return todos;
+}
+
+const addTask = async (event) => {
     event.preventDefault();
     const todoText = document.getElementById('new-task').value;
     let todoDate = document.getElementById('task-deadline').value;
     let todoPrio = document.getElementById('priority').value;
-    
+
     let taskObject = {
         id: new Date().getTime().toString(),
         description: todoText,
@@ -46,12 +39,24 @@ const submitTask = (event) => {
     
     let currentTask = document.getElementById(`remove-${taskObject.id}`);
     currentTask.addEventListener('click', removeTask);
-    
-    taskList.push(taskObject);
-    
-    let tasksJSON = JSON.stringify(taskList);
-    localStorage.setItem('tasks', `${tasksJSON}`);
-};
+
+    const response = await fetch('http://localhost:3000/todo', {
+        method: 'POST',
+        mode: "cors",
+        cache: "default",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        redirect: "follow", 
+        referrerPolicy: "no-referrer", 
+        body: JSON.stringify(taskObject)
+    });
+    return response.json();
+}
+
+const fetchedTaskList = await fetchTasks();
+const taskList = fetchedTaskList.todo;
 
 const removeTask = (event) => {
     event.preventDefault();
@@ -73,7 +78,7 @@ const removeTask = (event) => {
 }
 
 const submit = document.getElementById('submit');
-submit.addEventListener('click', submitTask);
+submit.addEventListener('click', addTask);
 
 for (let task of taskList) {
     todoField.insertAdjacentHTML("beforeend", todoElement(task.id, task.description, task.deadline, task.priority));

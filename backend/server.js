@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const todo = require('./database.js');
 const path = require('path');
+const bodyParser = require('body-parser');
 
 const PORT = 3000;
 
@@ -13,8 +14,17 @@ app.use('', (req, res, next) => {
     next();
 })
 
+app.use(bodyParser.json());
+
 app.get('/todo', (req, res, next) => {
+    console.log('Listing all tasks')
     res.send(todo);
+})
+
+app.post('/todo', (req, res, next) => {
+    console.log('Adding task');
+    const task = req.body;
+    todo.todo.push(task);
 })
 
 
