@@ -10,7 +10,7 @@
         <title>ToDaLoo</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -20,7 +20,7 @@
         <div class="container" id="container-field">
             <div class="todo" id="add-todo">
                 <div class="title">What do you want to accomplish next?</div>
-                <form id="input-form" onsubmit="submitTask()">
+                <form id="input-form" onsubmit="addTask()">
                     <input type="text" id="new-task" name="new-task" placeholder="Describe your new task">
                     <input type="date" id="task-deadline" name="task-deadline">
                     <select name="priority" id="priority" class="dropdown">
