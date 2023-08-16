@@ -68,9 +68,7 @@ app.get('/login', (req, res, next) => {
 app.post('/login', (req, res, next) => {
     const { username, password } = req.body;
     users.findByUsername(username, (err, user) => {
-        console.log(`This is the user I found ${user}`);
         if (!user) {
-            console.log('No user found');
             res.status(403).send('No user found')
         } else {
             if (user.password === password) {
