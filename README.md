@@ -9,6 +9,6 @@ to start the project:
 Currently there is no database connected - while the server is running, tasks are fetched from, added to and removed from the database.js file.
 
 Improvement ideas:
-- add authentication
+- add authentication (WIP)
 - connect a database
 - recreate frontend with React.js
