@@ -6,6 +6,8 @@ to start the project:
 2. run server.js in the backend folder with `node server.js`
 3. open `http://localhost:3000/`
 
+Login page is currently available under `http://localhost:3000/login`
+
 Currently there is no database connected - while the server is running, tasks are fetched from, added to and removed from the database.js file.
 
 Improvement ideas:
