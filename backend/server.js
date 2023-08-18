@@ -4,6 +4,7 @@ const todo = require('./database/database.js');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const store = new session.MemoryStore();
 const users = require('./database/users.js');
 
@@ -13,12 +14,8 @@ app.use(express.static('../frontend'));
 
 app.set('view engine', 'ejs');
 
-app.use('', (req, res, next) => {
-    console.log('Received a request');
-    next();
-})
-
 app.use(morgan('dev'));
+app.use(cookieParser());
 
 app.use(bodyParser.json());
 app.use(express.urlencoded())
@@ -26,35 +23,25 @@ app.use(express.urlencoded())
 app.use(session({
     secret: 'test',
     cookie: {
-        maxAge: 1000,
-        secure: true,
-        sameSite: 'none'
+        maxAge: 1000 * 60 * 60 * 24,
+        sameSite: 'strict'
     },
     resave: false,
     saveUninitialized: false,
-    store
+    store: store,
 }))
-
-const ensureAuthentication = (req, res, next) => {
-    if (req.session.authenticated) {
-        console.log('You are authenticated')
-        next()
-    } else {
-        res.render('login')
-    }
-}
 
 app.get('/todo', (req, res, next) => {
     res.send(todo);
 })
 
-app.post('/todo', (req, res, next) => {
+app.post('/todos', (req, res, next) => {
     const task = req.body;
     todo.todo.push(task);
     res.send(todo);
 })
 
-app.delete('/todo/:id', (req, res, next) => {
+app.delete('/todos/:id', (req, res, next) => {
     const id = Number(req.params.id);
     const indexToRemove = todo.todo.findIndex(task => Number(task.id) === Number(id));
     todo.todo.splice(indexToRemove, 1);
@@ -62,7 +49,20 @@ app.delete('/todo/:id', (req, res, next) => {
 })
 
 app.get('/login', (req, res, next) => {
-    res.render('login');
+    if (!req.session.authenticated){
+        res.render('login');
+    } else {
+        res.redirect('todos');
+    }
+})
+
+app.get('/todos', (req, res, next) => {
+    console.log(req.session);
+    if (req.session.authenticated) {
+        res.render('todos');
+    } else {
+        res.redirect('login');
+    }
 })
 
 app.post('/login', (req, res, next) => {
@@ -77,11 +77,12 @@ app.post('/login', (req, res, next) => {
                     username,
                     password,
                 };
-                res.redirect('/');
+                res.redirect('todos');
             } else {
                 res.status(403).send('Wrong password');
             }
         }
+        console.log(req.session);
     });
 })
 
