@@ -80,3 +80,5 @@ for (let task of taskList) {
     currentTask.addEventListener('click', removeTask);
 }
 
+const profileButton = document.getElementById('profile');
+profileButton.addEventListener('click', () => window.location = 'http://localhost:3000/profile');
