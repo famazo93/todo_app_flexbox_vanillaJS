@@ -92,3 +92,9 @@ body {
     left: 1px;
     background-color:dimgray
 }
+
+#profile {
+    position: absolute;
+    right: 50px;
+    top: 30px;
+}
