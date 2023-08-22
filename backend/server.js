@@ -125,6 +125,10 @@ app.post('/login', (req, res, next) => {
     })
 })
 
+app.get('/profile', (req, res, next) => {
+    res.render('profile', { username: req.session.user.username, password: req.session.user.password });
+})
+
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 })
