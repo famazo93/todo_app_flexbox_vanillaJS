@@ -56,7 +56,7 @@ const addTask = async (event) => {
 }
 
 const fetchedTaskList = await fetchTasks();
-const taskList = fetchedTaskList.todo;
+const taskList = fetchedTaskList;
 
 console.log(taskList);
 
