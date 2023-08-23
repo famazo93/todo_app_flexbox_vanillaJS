@@ -61,7 +61,6 @@ app.get('/login', (req, res, next) => {
 })
 
 app.get('/todos', (req, res, next) => {
-    console.log(req.session);
     if (req.session.authenticated) {
         res.render('todos');
     } else {
@@ -112,6 +111,7 @@ app.post('/login', (req, res, next) => {
                 if (selectedUser.password === password) {
                     req.session.authenticated = true;
                     req.session.user = {
+                        id: selectedUser.id,
                         username,
                         password,
                     };
@@ -121,12 +121,48 @@ app.post('/login', (req, res, next) => {
                 }
             }
         }
-        console.log(req.session);
     })
 })
 
 app.get('/profile', (req, res, next) => {
-    res.render('profile', { username: req.session.user.username, password: req.session.user.password });
+    res.render('profile', { id: req.session.user.id, username: req.session.user.username, password: req.session.user.password });
+})
+
+app.post('/profile/edit/:id', (req, res, next) => {
+    fs.readFile('./database/users.json', 'utf8', (err, data) => {
+        if (err) {
+            throw err;
+        } else {
+            const { users } = JSON.parse(data);
+            const userID = req.params.id;
+            let userIndex = null;
+            for (let i = 0; i < users.length; i++) {
+                if (Number(users[i].id) === Number(userID)) {
+                    userIndex = i;
+                }
+            }
+            const { username, passwordOld, passwordNew, _method } = req.body;
+            if (_method === 'PATCH') {
+                if (userIndex !== null) {
+                    users[userIndex] = {
+                        id: users[userIndex].id,
+                        username: username ? username : users[userIndex].username,
+                        password: passwordNew ? passwordNew : users[userIndex].password
+                    }
+
+                    fs.writeFile('./database/users.json', JSON.stringify({users}), (err) => {
+                        if (err) {
+                            throw err;
+                        } else {
+                            res.status(200).redirect('http://localhost:3000/todos')
+                        }
+                    })
+                } else {
+                    res.status(404).send({state: 'user not found'});
+                }
+            }
+        }
+    })
 })
 
 app.listen(PORT, () => {
