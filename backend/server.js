@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const todo = require('./database/database.js');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -32,20 +31,68 @@ app.use(session({
 }))
 
 app.get('/todo', (req, res, next) => {
-    res.send(todo);
+    const userID = req.session.user.id;
+    fs.readFile('./database/todos.json', 'utf8', (err, data) => {
+        if (err) {
+            throw err;
+        } else {
+            const {allTodos} = JSON.parse(data);
+            res.send(allTodos[userID]);
+        }
+    })
 })
 
 app.post('/todos', (req, res, next) => {
+    const userID = req.session.user.id;
     const task = req.body;
-    todo.todo.push(task);
-    res.send(todo);
+
+    fs.readFile('./database/todos.json', 'utf8', (err, data) => {
+        if (err) {
+            throw err;
+        } else {
+            const { allTodos } = JSON.parse(data);
+            allTodos[userID].push(task);
+
+            fs.writeFile('./database/todos.json', JSON.stringify({allTodos}), (err) => {
+                if (err) {
+                    throw err;
+                } else {
+                    res.send(allTodos);
+                }
+            })
+        }
+    })
 })
 
 app.delete('/todos/:id', (req, res, next) => {
-    const id = Number(req.params.id);
-    const indexToRemove = todo.todo.findIndex(task => Number(task.id) === Number(id));
-    todo.todo.splice(indexToRemove, 1);
-    res.send(todo);
+    fs.readFile('./database/todos.json', 'utf8', (err, data) => {
+        if (err) {
+            throw err;
+        } else {
+            const { allTodos } = JSON.parse(data);
+            const todoID = req.params.id;
+            const userID = req.session.user.id;
+            let todoIndex = null;
+            for (let i = 0; i < allTodos[userID].length; i++) {
+                if (allTodos[userID][i].id === todoID) {
+                    todoIndex = i;
+                }
+            }
+            if (todoIndex !== null) {
+                allTodos[userID].splice(todoIndex, 1);
+
+                fs.writeFile('./database/todos.json', JSON.stringify({allTodos}), (err) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        res.status(204).send({status: "DONE"});
+                    }
+                })
+            } else {
+                res.status(404).send({state: "todo not found"});
+            }
+        }
+    })
 })
 
 app.get('/login/newUser', (req, res, next) => {
