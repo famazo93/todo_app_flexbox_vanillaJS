@@ -135,28 +135,32 @@ app.post('/profile/edit/:id', (req, res, next) => {
         } else {
             const { users } = JSON.parse(data);
             const userID = req.params.id;
+            const { username, passwordOld, passwordNew, _method } = req.body;
             let userIndex = null;
             for (let i = 0; i < users.length; i++) {
                 if (Number(users[i].id) === Number(userID)) {
                     userIndex = i;
                 }
             }
-            const { username, passwordOld, passwordNew, _method } = req.body;
             if (_method === 'PATCH') {
                 if (userIndex !== null) {
-                    users[userIndex] = {
-                        id: users[userIndex].id,
-                        username: username ? username : users[userIndex].username,
-                        password: passwordNew ? passwordNew : users[userIndex].password
-                    }
-
-                    fs.writeFile('./database/users.json', JSON.stringify({users}), (err) => {
-                        if (err) {
-                            throw err;
-                        } else {
-                            res.status(200).redirect('http://localhost:3000/todos')
+                    if (users[userIndex].password === passwordOld) {
+                        users[userIndex] = {
+                            id: users[userIndex].id,
+                            username: username ? username : users[userIndex].username,
+                            password: passwordNew ? passwordNew : users[userIndex].password
                         }
-                    })
+
+                        fs.writeFile('./database/users.json', JSON.stringify({users}), (err) => {
+                            if (err) {
+                                throw err;
+                            } else {
+                                res.status(200).redirect('http://localhost:3000/todos')
+                            }
+                        })
+                    } else {
+                        res.status(403).send({state: 'wrong password'});
+                    }
                 } else {
                     res.status(404).send({state: 'user not found'});
                 }
