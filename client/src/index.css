@@ -1,0 +1,186 @@
+body {
+  margin: 0;
+}
+
+#root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+  /* global variables */
+  --primary-dark-blue: #071952;
+  --primary-accent-blue: #0B666A;
+  --secondary-accent-blue: #35A29F;
+  --secondary-accent-light: #97FEED;
+
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  max-width: 5000px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-image: url('./assets/landing-background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+button {
+  background-color: rgba(255, 255, 255, 0);
+  box-shadow: none;
+  border: none;
+}
+
+/* Landing page rules */
+.landing-container {
+  width: 97%;
+  height: 95%;
+  display: flex;
+  border: 2px var(--primary-dark-blue) solid;
+}
+
+/* Login section */
+.login-container {
+  display: inline-flex;
+  width: 40%;
+  height: 100%;
+  background-image: url('./assets/login-background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box {
+  background-color: rgba(75, 129, 143, 0.6);
+  padding: 30px;
+  border: 2px var(--secondary-accent-blue) solid;
+  border-radius: 30px;
+  max-width: 70%;
+}
+
+.login-title {
+  font-size: 2.3rem;
+  font-weight: bold;
+  color: var(--secondary-accent-light);
+  margin-bottom: 20px;
+}
+
+.login-message {
+  font-size: 1.2rem;
+  color: var(--secondary-accent-light);
+  margin-bottom: 40px;
+}
+
+.login-button {
+  border: 2px var(--secondary-accent-blue) solid;
+  border-radius: 10px;
+  width: 50%;
+  line-height: 2rem;
+  color: var(--secondary-accent-light);
+  transition: 0.5s;
+  font-size: 1rem;
+}
+
+.login-button:hover {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 55%;
+  transition: 0.5s;
+  font-size: 1.1rem;
+}
+
+.login-button:active {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 55%;
+  transition: 0.2s;
+  font-size: 1.1rem;
+}
+
+/* Signup section */
+.signup-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  height: 100%;
+  background-color: white;
+}
+
+.signup-box {
+  max-width: 70%;
+  text-align: center;
+}
+
+.signup-title {
+  color: var(--primary-accent-blue);
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.signup-message {
+  font-size: 1.2rem;
+  color: var(--primary-accent-blue);
+  margin-bottom: 40px;
+}
+
+.signup-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-control {
+  width: 70%;
+  padding: 8px;
+  border: 1px var(--primary-dark-blue) solid;
+  border-radius: 5px;
+  margin: 3px;
+  color: var(--secondary-accent-blue);
+  transition: 0.5s;
+}
+
+.form-control:focus {
+  width: 75%;
+  padding: 10px;
+  transition: 0.5s;
+}
+
+.signup-button {
+  margin-top: 40px;
+  border: 2px var(--secondary-accent-blue) solid;
+  border-radius: 10px;
+  width: 50%;
+  line-height: 2rem;
+  color: var(--primary-dark-blue);
+  transition: 0.5s;
+  font-size: 1rem;
+}
+
+.signup-button:hover {
+  cursor: pointer;
+  width: 55%;
+  transition: 0.5s;
+  font-size: 1.1rem;
+}
+
+.signup-button:active {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 55%;
+  transition: 0.2s;
+  font-size: 1.1rem;
+}
+
+.login-error {
+  color: red;
+  font-size: 0.7rem;
+  width: 70%;
+  text-align: left;
+}

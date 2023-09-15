@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const store = new session.MemoryStore();
@@ -16,8 +15,15 @@ app.set('view engine', 'ejs');
 app.use(morgan('dev'));
 app.use(cookieParser());
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.urlencoded())
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:5173")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET, POST");
+    next()
+})
 
 app.use(session({
     secret: 'test',
@@ -41,6 +47,37 @@ app.get('/todo', (req, res, next) => {
         }
     })
 })
+
+app.get('/authentication', (req, res, next) => {
+    const authStatus = req.session.authenticated;
+    authStatus ? res.send({status: true}) : res.send({status: false});
+})
+
+app.post('/authentication', (req, res, next) => {
+    console.log(req.body);
+    const {username, password} = req.body.userToCheck;
+    fs.readFile('./database/users.json', 'utf8', (err, data) => {
+        if (err) {
+            throw err;
+        } else {
+            const {users} = JSON.parse(data);
+            let userFound = false;
+            for (let user of users) {
+                if (user.username === username) {
+                    userFound = true;
+                    if (user.password === password) {
+                        res.send({status: true, msg: "Successful login"});
+                    } else {
+                        res.send({status: false, msg: "Wrong password", wrong: "password"})
+                    };
+                }
+            };
+            if (!userFound) {
+                res.send({status: false, msg: "User not found", wrong: "username"});
+            }
+        }
+    })
+});
 
 app.post('/todos', (req, res, next) => {
     const userID = req.session.user.id;
@@ -116,25 +153,40 @@ app.get('/todos', (req, res, next) => {
 })
 
 app.post('/login/newUser', (req, res, next) => {
-    const { username, password } = req.body;
+    const { email, username, password } = req.body;
     fs.readFile('./database/users.json', 'utf8', (err, data) => {
         if (err) {
             throw err;
         } else {
             const { users } = JSON.parse(data);
             const lastId = users[users.length - 1].id;
-            users.push({
-                id: Number(lastId) + 1,
-                username,
-                password
-            })
-            fs.writeFile('./database/users.json', JSON.stringify({users}), (err) => {
-                if (err) {
-                    throw err
-                } else {
-                    res.render('login');
+            let doesUsernameExist = false;
+            let doesEmailExist = false;
+
+            for (let user of users) {
+                if (user.email === email) {
+                    doesEmailExist = true;
+                };
+                if (user.username === username) {
+                    doesUsernameExist = true;
                 }
-            })
+            } 
+
+            if (!doesEmailExist && !doesUsernameExist) {
+                users.push({
+                    id: Number(lastId) + 1,
+                    email,
+                    username,
+                    password
+                })
+                fs.writeFile('./database/users.json', JSON.stringify({users}), (err) => {
+                    if (err) {
+                        throw err
+                    } else {
+                        res.send({msg: "new user added"});
+                    }
+                })
+            } else {}
         }
     })
 })
