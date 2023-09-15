@@ -1,5 +1,26 @@
 function SignupForm(props) {
-    const {handleSubmit} = props;
+    const {setSubmitted} = props;
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const {email, username, password} = event.target;
+        const newUser = {
+            email: email.value,
+            username: username.value,
+            password: password.value
+        };
+
+        await fetch('http://localhost:3000/login/newUser', {
+            method: "POST",
+            body: JSON.stringify(newUser),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Accept": "application/json"
+            }
+        });
+
+        setSubmitted(true);
+    }
 
     return (
         <>

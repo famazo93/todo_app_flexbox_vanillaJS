@@ -6,10 +6,6 @@ function Landing() {
     const [submitted, setSubmitted] = useState(false);
     const [login, setLogin] = useState(false);
 
-    const handleSubmit = () => {
-        setSubmitted(true);
-    }
-
     const handleLogin = () => {
         setLogin(true);
     }
@@ -29,7 +25,7 @@ function Landing() {
             </div>
             <div className='signup-container'>
                 <div className='signup-box'>
-                    {login ? <LoginForm /> : !submitted ? <SignupForm handleSubmit={handleSubmit} /> : (
+                    {login ? <LoginForm /> : !submitted ? <SignupForm setSubmitted={setSubmitted} /> : (
                             <div className='signup-title'>Thank you for registering! Now you can sign in.</div>
                         )}
                 </div>
