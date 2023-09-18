@@ -4,14 +4,14 @@ import Cookies from 'js-cookie';
 function LoginForm() {
     const [wrongPassword, setWrongPassword] = useState(false);
     const [wrongUsername, setWrongUsername] = useState(false);
+    let usernameInput = null;
+    let passwordInput = null;
 
-    const handleLogin = async (event) => {
-        event.preventDefault();
-        const {username, password} = event.target;
+    const handleLogin = async () => {
         const userToCheck = {
             userToCheck: {
-                username: username.value,
-                password: password.value
+                username: usernameInput,
+                password: passwordInput
             }
         };
 
@@ -26,6 +26,8 @@ function LoginForm() {
         const {status, wrong} = await response.json();
         if (status) {
             Cookies.set('authenticated', true, {expires: 1000 * 60 * 60 * 24});
+            Cookies.set('user', userToCheck.username, {expires: 1000 * 60 * 60 * 24})
+            window.location = 'http://localhost:5173/'
         } else if (wrong === 'password') {
             setWrongPassword(true);
         } else if (wrong === 'username') {
@@ -33,6 +35,14 @@ function LoginForm() {
         } else {
             console.log('Something went wrong...')
         }
+    }
+
+    const handleUsernameInput = event => {
+        usernameInput = event.target.value;
+    };
+
+    const handlePasswordInput = event => {
+        passwordInput = event.target.value;
     }
 
     const resetCredentialsCheck = () => {
@@ -45,16 +55,16 @@ function LoginForm() {
             <div className='signup-title'>It is great to have you back.</div>
             <div className='signup-message'>Please enter your username and password.</div>
             <div className='signup-form'>
-                <form action="" onSubmit={handleLogin}>
+                <form action="">
                     <div className="form-group">
-                            <input onClick={resetCredentialsCheck} type="text" className="form-control" name="username" placeholder='Username' required />
+                            <input onChange={handleUsernameInput} onClick={resetCredentialsCheck} type="text" className="form-control" name="username" placeholder='Username' required />
                             {wrongUsername ? <span className='login-error'>User not found!</span> : null}
                     </div>
                     <div className="form-group">
-                            <input onClick={resetCredentialsCheck} type="password" className="form-control" name="password" placeholder='Password' required />
+                            <input onChange={handlePasswordInput} onClick={resetCredentialsCheck} type="password" className="form-control" name="password" placeholder='Password' required />
                             {wrongPassword ? <span className='login-error'>Incorrect password!</span> : null}
                     </div>
-                    <button type='submit' className='signup-button'>Sign In</button>
+                    <button type='button' onClick={handleLogin} className='signup-button'>Sign In</button>
                 </form>
             </div>
         </>

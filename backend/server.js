@@ -25,8 +25,8 @@ app.use(function (req, res, next) {
     next()
 })
 
-app.get('/todo', (req, res, next) => {
-    const userID = req.session.user.id;
+app.get('/todo/:username', (req, res, next) => {
+    const userID = req.params.id;
     fs.readFile('./database/todos.json', 'utf8', (err, data) => {
         if (err) {
             throw err;
