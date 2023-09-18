@@ -25,17 +25,6 @@ app.use(function (req, res, next) {
     next()
 })
 
-app.use(session({
-    secret: 'test',
-    cookie: {
-        maxAge: 1000 * 60 * 60 * 24,
-        sameSite: 'strict'
-    },
-    resave: false,
-    saveUninitialized: false,
-    store: store,
-}))
-
 app.get('/todo', (req, res, next) => {
     const userID = req.session.user.id;
     fs.readFile('./database/todos.json', 'utf8', (err, data) => {
@@ -48,13 +37,7 @@ app.get('/todo', (req, res, next) => {
     })
 })
 
-app.get('/authentication', (req, res, next) => {
-    const authStatus = req.session.authenticated;
-    authStatus ? res.send({status: true}) : res.send({status: false});
-})
-
 app.post('/authentication', (req, res, next) => {
-    console.log(req.body);
     const {username, password} = req.body.userToCheck;
     fs.readFile('./database/users.json', 'utf8', (err, data) => {
         if (err) {
@@ -68,12 +51,12 @@ app.post('/authentication', (req, res, next) => {
                     if (user.password === password) {
                         res.send({status: true, msg: "Successful login"});
                     } else {
-                        res.send({status: false, msg: "Wrong password", wrong: "password"})
+                        res.send({status: false, wrong: "password"})
                     };
                 }
             };
             if (!userFound) {
-                res.send({status: false, msg: "User not found", wrong: "username"});
+                res.send({status: false, wrong: "username"});
             }
         }
     })
@@ -136,22 +119,6 @@ app.get('/login/newUser', (req, res, next) => {
     res.render('newUser')
 })
 
-app.get('/login', (req, res, next) => {
-    if (!req.session.authenticated){
-        res.render('login');
-    } else {
-        res.redirect('todos');
-    }
-})
-
-app.get('/todos', (req, res, next) => {
-    if (req.session.authenticated) {
-        res.render('todos');
-    } else {
-        res.redirect('login');
-    }
-})
-
 app.post('/login/newUser', (req, res, next) => {
     const { email, username, password } = req.body;
     fs.readFile('./database/users.json', 'utf8', (err, data) => {
@@ -187,38 +154,6 @@ app.post('/login/newUser', (req, res, next) => {
                     }
                 })
             } else {}
-        }
-    })
-})
-
-app.post('/login', (req, res, next) => {
-    const { username, password } = req.body;
-    fs.readFile('./database/users.json', 'utf8', (err, data) => {
-        if (err) {
-            throw err;
-        } else {
-            const { users } = JSON.parse(data);
-            let selectedUser = null;
-            users.forEach(user => {
-                if (user.username === username) {
-                    selectedUser = user;
-                }
-            });
-            if (!selectedUser) {
-                res.status(404).send('No user found');
-            } else {
-                if (selectedUser.password === password) {
-                    req.session.authenticated = true;
-                    req.session.user = {
-                        id: selectedUser.id,
-                        username,
-                        password,
-                    };
-                    res.redirect('todos');
-                } else {
-                    res.status(403).send('Wrong password');
-                }
-            }
         }
     })
 })

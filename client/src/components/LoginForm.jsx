@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import Cookies from 'js-cookie';
 
 function LoginForm() {
     const [wrongPassword, setWrongPassword] = useState(false);
@@ -22,9 +23,9 @@ function LoginForm() {
                 "Accept": "application/json"
             }
         });
-        const {status, msg, wrong} = await response.json();
+        const {status, wrong} = await response.json();
         if (status) {
-            console.log(msg);
+            Cookies.set('authenticated', true, {expires: 1000 * 60 * 60 * 24});
         } else if (wrong === 'password') {
             setWrongPassword(true);
         } else if (wrong === 'username') {
