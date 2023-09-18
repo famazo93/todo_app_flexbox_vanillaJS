@@ -26,13 +26,13 @@ app.use(function (req, res, next) {
 })
 
 app.get('/todo/:username', (req, res, next) => {
-    const userID = req.params.id;
+    const username = req.params.username;
     fs.readFile('./database/todos.json', 'utf8', (err, data) => {
         if (err) {
             throw err;
         } else {
             const {allTodos} = JSON.parse(data);
-            res.send(allTodos[userID]);
+            res.send(allTodos[username]);
         }
     })
 })
