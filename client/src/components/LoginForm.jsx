@@ -27,7 +27,7 @@ function LoginForm() {
         if (status) {
             Cookies.set('authenticated', true, {expires: 1000 * 60 * 60 * 24});
             Cookies.set('user', userToCheck.userToCheck.username, {expires: 1000 * 60 * 60 * 24})
-            window.location = 'http://localhost:5173/'
+            window.location = 'http://localhost:5173'
         } else if (wrong === 'password') {
             setWrongPassword(true);
         } else if (wrong === 'username') {

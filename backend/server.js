@@ -32,7 +32,10 @@ app.get('/todo/:username', (req, res, next) => {
             throw err;
         } else {
             const {allTodos} = JSON.parse(data);
-            res.send(allTodos[username]);
+            const todos = {
+                todos: allTodos[`${username}`]
+            }
+            res.send(todos);
         }
     })
 })
@@ -62,16 +65,15 @@ app.post('/authentication', (req, res, next) => {
     })
 });
 
-app.post('/todos', (req, res, next) => {
-    const userID = req.session.user.id;
+app.post('/todos/:username', (req, res, next) => {
     const task = req.body;
-
+    const user = req.params.username;
     fs.readFile('./database/todos.json', 'utf8', (err, data) => {
         if (err) {
             throw err;
         } else {
             const { allTodos } = JSON.parse(data);
-            allTodos[userID].push(task);
+            allTodos[`${user}`].push(task);
 
             fs.writeFile('./database/todos.json', JSON.stringify({allTodos}), (err) => {
                 if (err) {
