@@ -66,7 +66,13 @@ app.post('/authentication', (req, res, next) => {
 });
 
 app.post('/todos/:username', (req, res, next) => {
-    const task = req.body;
+    const {description, deadline, priority} = req.body;
+    const task = {
+        id: Date.now(),
+        description,
+        deadline,
+        priority
+    }
     const user = req.params.username;
     fs.readFile('./database/todos.json', 'utf8', (err, data) => {
         if (err) {
@@ -79,7 +85,7 @@ app.post('/todos/:username', (req, res, next) => {
                 if (err) {
                     throw err;
                 } else {
-                    res.send(allTodos);
+                    res.status(200).send();
                 }
             })
         }
