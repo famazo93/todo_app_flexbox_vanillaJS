@@ -8,10 +8,6 @@ const fs = require('fs');
 
 const PORT = 3000;
 
-app.use(express.static('../frontend'));
-
-app.set('view engine', 'ejs');
-
 app.use(morgan('dev'));
 app.use(cookieParser());
 
@@ -123,10 +119,6 @@ app.delete('/todos/:id', (req, res, next) => {
     })
 })
 
-app.get('/login/newUser', (req, res, next) => {
-    res.render('newUser')
-})
-
 app.post('/login/newUser', (req, res, next) => {
     const { email, username, password } = req.body;
     fs.readFile('./database/users.json', 'utf8', (err, data) => {
@@ -164,10 +156,6 @@ app.post('/login/newUser', (req, res, next) => {
             } else {}
         }
     })
-})
-
-app.get('/profile', (req, res, next) => {
-    res.render('profile', { id: req.session.user.id, username: req.session.user.username, password: req.session.user.password });
 })
 
 app.post('/profile/edit/:id', (req, res, next) => {
