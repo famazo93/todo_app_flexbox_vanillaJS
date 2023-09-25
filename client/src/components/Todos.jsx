@@ -1,26 +1,33 @@
-import Todo from './Todo';
+import Stage from './Stage';
 import {useState, useEffect} from 'react';
 import TodoInput from './TodoInput';
 
 function Todos(props) {
     const {user} = props;
-    const [todos, setTodos] = useState(null);
+    const [stages, setStages] = useState(null);
 
     useEffect(() => {
         const getTodos = async () => {
             const response = await fetch(`http://localhost:3000/todo/${user}`);
-            const {todos} = await response.json();
-            setTodos(todos);
-        }; 
+            const data = await response.json();
+
+            const allStages = [];
+            for (let todo of data.todos) {
+                allStages.push(todo.stage);
+            }
+    
+            const uniqueStages = [... new Set(allStages)];
+            setStages(uniqueStages);
+        };
 
         getTodos();
     }, [user])
 
-    return todos ? (
+    return stages ? (
         <div className="todos-container" id="container-field">
             <TodoInput />
             <div className='new-todos'>    
-                {todos.map((todo) => <Todo key={todo.id} todo={todo} />)}
+                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} />)}
             </div>
         </div>
     ) : (

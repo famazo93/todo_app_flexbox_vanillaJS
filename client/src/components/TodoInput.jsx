@@ -1,12 +1,12 @@
 import Cookies from 'js-cookie';
 
 function TodoInput() {
+    const user = Cookies.get('user');
     const handleSubmit = async (event) => {
         const description = event.target['new-task'].value;
         const deadline = event.target['task-deadline'].value;
         const priority = event.target.priority.value;
-        const user = Cookies.get('user');
-        
+
         const newTask = {
             description,
             deadline,
@@ -25,11 +25,12 @@ function TodoInput() {
 
     return (
         <div className="todo" id="add-todo">
-            <div className="title">What do you want to accomplish next?</div>
+            <div className="title">Welcome back, {user}!</div>
             <form id="input-form" action="" onSubmit={handleSubmit}>
                 <input className="newtask-description-input" type="text" id="new-task" name="new-task" placeholder="Describe your new task" />
                 <input className="newtask-date-input" type="date" id="task-deadline" name="task-deadline" />
                 <select className="newtask-prio-dropdown" name="priority" id="priority">
+                    <option value="">Priority</option>
                     <option value="Prio: High">High</option>
                     <option value="Prio: Medium">Medium</option>
                     <option value="Prio: Low">Low</option>

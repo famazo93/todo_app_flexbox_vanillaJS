@@ -36,6 +36,19 @@ app.get('/todo/:username', (req, res, next) => {
     })
 })
 
+app.get('/todo/:username/:stage', (req, res, next) => {
+    const {username, stage} = req.params;
+    fs.readFile('./database/todos.json', 'utf8', (err, data) => {
+        if (err) {
+            throw err;
+        } else {
+            const {allTodos} = JSON.parse(data);
+            const userTodos = allTodos[`${username}`].filter(todo => todo.stage === stage);
+            res.send(userTodos);
+        }
+    })
+})
+
 app.post('/authentication', (req, res, next) => {
     const {username, password} = req.body.userToCheck;
     fs.readFile('./database/users.json', 'utf8', (err, data) => {

@@ -269,6 +269,34 @@ button {
 .new-todos {
   height: 70%;
   margin: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: rgba(255, 255, 255, 0.4)
+}
+
+.todo-stage {
+  height: 98%;
+  width: 300px;
+  border: 2px gray dashed;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 5px;
+}
+
+.todo-added {
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border: 1px white solid;
+  border-radius: 5px;
+  margin: 5px;
 }
 
 [id^="remove"] {

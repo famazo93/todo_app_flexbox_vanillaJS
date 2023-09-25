@@ -1,1 +1,35 @@
-{"allTodos":{"famazo":[{"id":"1692809413826","description":"test","deadline":"No Deadline","priority":"Prio: High"},{"id":"1692809702516","description":"test","deadline":"No Deadline","priority":"Prio: High"},{"id":1695390676513,"description":"test2","deadline":"","priority":"Prio: High"},{"id":1695390682743,"description":"test3","deadline":"","priority":"Prio: High"}],"kamilla":[]}}
+{
+    "allTodos": {
+        "famazo": [
+            {
+                "id": "1692809413826",
+                "description": "test",
+                "deadline": "No Deadline",
+                "priority": "Prio: High",
+                "stage": "To Start"
+            },
+            {
+                "id": "1692809702516",
+                "description": "test",
+                "deadline": "No Deadline",
+                "priority": "Prio: High",
+                "stage": "In Progress"
+            },
+            {
+                "id": 1695390676513,
+                "description": "test2",
+                "deadline": "",
+                "priority": "Prio: High",
+                "stage": "In Progress"
+            },
+            {
+                "id": 1695390682743,
+                "description": "test3",
+                "deadline": "",
+                "priority": "Prio: High",
+                "stage": "Done"
+            }
+        ],
+        "kamilla": []
+    }
+}
