@@ -15,7 +15,7 @@ function Todos(props) {
             for (let todo of data.todos) {
                 allStages.push(todo.stage);
             }
-    
+            allStages.push('Your stage');
             const uniqueStages = [... new Set(allStages)];
             setStages(uniqueStages);
         };

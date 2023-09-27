@@ -3,14 +3,18 @@ import Cookies from 'js-cookie';
 function TodoInput() {
     const user = Cookies.get('user');
     const handleSubmit = async (event) => {
-        const description = event.target['new-task'].value;
+        const title = event.target['new-task-title'].value;
+        const description = event.target['new-task-description'].value;
         const deadline = event.target['task-deadline'].value;
         const priority = event.target.priority.value;
+        const stage = event.target.stage.value;
 
         const newTask = {
+            title,
             description,
             deadline,
-            priority
+            priority,
+            stage
         };
 
         await fetch(`http://localhost:3000/todos/${user}`, {
@@ -27,14 +31,21 @@ function TodoInput() {
         <div className="todo" id="add-todo">
             <div className="title">Welcome back, {user}!</div>
             <form id="input-form" action="" onSubmit={handleSubmit}>
-                <input className="newtask-description-input" type="text" id="new-task" name="new-task" placeholder="Describe your new task" />
+                <input className="newtask-title-input" type="text" id="new-task-title" name="new-task-title" placeholder="Headline" />
+                <input className="newtask-description-input" type="text" id="new-task-description" name="new-task-description" placeholder="Describe your task" />
                 <input className="newtask-date-input" type="date" id="task-deadline" name="task-deadline" />
                 <select className="newtask-prio-dropdown" name="priority" id="priority">
                     <option value="">Priority</option>
-                    <option value="Prio: High">High</option>
-                    <option value="Prio: Medium">Medium</option>
-                    <option value="Prio: Low">Low</option>
-                    <option value="Prio: No Prio">No Prio</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                    <option value="No">No Prio</option>
+                </select>
+                <select className="newtask-stage-dropdown" name="stage" id="stage">
+                    <option value="">Select a Stage</option>
+                    <option value="To Start">To Start</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
                 </select>
                 <input type="submit" value="Add task" id="submit" className="newtask-button" />
             </form>

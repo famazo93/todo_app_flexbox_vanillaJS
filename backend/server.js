@@ -75,12 +75,14 @@ app.post('/authentication', (req, res, next) => {
 });
 
 app.post('/todos/:username', (req, res, next) => {
-    const {description, deadline, priority} = req.body;
+    const {title, description, deadline, priority, stage} = req.body;
     const task = {
         id: Date.now(),
+        title,
         description,
         deadline,
-        priority
+        priority,
+        stage
     }
     const user = req.params.username;
     fs.readFile('./database/todos.json', 'utf8', (err, data) => {

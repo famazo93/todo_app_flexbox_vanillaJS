@@ -17,8 +17,9 @@ function Stage(props) {
 
     return todos ? (
         <div className='todo-stage'>
-            <h3>{stage}</h3>
+            <div className='stage-name'>{stage} {todos.length > 0 ? `(${todos.length})` : ''}</div>
             {todos.map((todo) => <Todo key={todo.id} todo={todo} />)}
+            {stage === 'Your stage' ? <button className='add-new-stage-button'>Add New Stage</button> : ''}
         </div>
     ) : <div>Loading...</div>
 
