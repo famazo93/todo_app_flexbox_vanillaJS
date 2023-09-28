@@ -1,7 +1,10 @@
 import Cookies from 'js-cookie';
 
-function TodoInput() {
+function TodoInput(props) {
+    const {stages} = props;
+
     const user = Cookies.get('user');
+
     const handleSubmit = async (event) => {
         const title = event.target['new-task-title'].value;
         const description = event.target['new-task-description'].value;
@@ -27,6 +30,9 @@ function TodoInput() {
 
     }
 
+
+
+
     return (
         <div className="todo" id="add-todo">
             <div className="title">Welcome back, {user}!</div>
@@ -43,9 +49,7 @@ function TodoInput() {
                 </select>
                 <select className="newtask-stage-dropdown" name="stage" id="stage">
                     <option value="">Select a Stage</option>
-                    <option value="To Start">To Start</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Done">Done</option>
+                    {stages ? stages.filter(stage => stage !== 'Your stage').map(stage => <option key={stage} value={stage}>{stage}</option>) : null}
                 </select>
                 <input type="submit" value="Add task" id="submit" className="newtask-button" />
             </form>

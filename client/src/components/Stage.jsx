@@ -1,9 +1,11 @@
 import {useState, useEffect} from 'react';
 import Todo from './Todo';
+import NewStageInput from './NewStageInput';
 
 function Stage(props) {
-    const {stage, user} = props;
+    const {stage, user, setStages} = props;
     const [todos, setTodos] = useState(null);
+    const [newStageName, setNewStageName] = useState(null);
 
     useEffect(() => {
         const fetchUserTodos = async () => {
@@ -15,11 +17,19 @@ function Stage(props) {
         fetchUserTodos();
     }, [stage, user])
 
+    const addNewStage = () => {
+        setStages(stage => [...stage, newStageName]);
+    }
+
+    const handleChange = (event) => {
+        setNewStageName(event.target.value);
+    }
+
     return todos ? (
         <div className='todo-stage'>
             <div className='stage-name'>{stage} {todos.length > 0 ? `(${todos.length})` : ''}</div>
             {todos.map((todo) => <Todo key={todo.id} todo={todo} />)}
-            {stage === 'Your stage' ? <button className='add-new-stage-button'>Add New Stage</button> : ''}
+            {stage === 'Your stage' ? <NewStageInput addNewStage={addNewStage} handleChange={handleChange} /> : ''}
         </div>
     ) : <div>Loading...</div>
 

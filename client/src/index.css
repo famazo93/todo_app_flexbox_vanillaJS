@@ -206,7 +206,7 @@ button {
 }
 
 .newtask-title-input {
-  width: 30%;
+  width: 15%;
   padding: 8px;
   border: 1px var(--primary-dark-blue) solid;
   border-radius: 5px;
@@ -216,13 +216,13 @@ button {
 }
 
 .newtask-title-input:focus {
-  width: 33%;
+  width: 16%;
   padding: 10px;
   transition: 0.5s;
 }
 
 .newtask-description-input {
-  width: 50%;
+  width: 30%;
   padding: 8px;
   border: 1px var(--primary-dark-blue) solid;
   border-radius: 5px;
@@ -232,7 +232,7 @@ button {
 }
 
 .newtask-description-input:focus {
-  width: 55%;
+  width: 31%;
   padding: 10px;
   transition: 0.5s;
 }
@@ -267,7 +267,7 @@ button {
 .newtask-button {
   border: 1px var(--secondary-accent-blue) solid;
   border-radius: 5px;
-  width: 10%;
+  min-width: 10%;
   padding: 7px;
   margin: 5px;
   color: var(--secondary-accent-blue);
@@ -313,12 +313,22 @@ button {
   justify-content: flex-start;
   background-color: rgba(255, 255, 255, 0.4);
   margin: 5px;
+  overflow: scroll;
 }
 
 .stage-name {
   width: 95%;
   text-align: left;
   margin: 5px;
+}
+
+.stage-name-input {
+  width: 60%;
+  padding: 7px;
+  border: 1px var(--primary-dark-blue) solid;
+  border-radius: 5px;
+  margin: 3px;
+  color: var(--secondary-accent-blue);
 }
 
 .add-new-stage-button {

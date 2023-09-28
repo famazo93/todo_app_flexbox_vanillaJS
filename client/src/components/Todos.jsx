@@ -25,14 +25,14 @@ function Todos(props) {
 
     return stages ? (
         <div className="todos-container" id="container-field">
-            <TodoInput />
+            <TodoInput stages={stages} />
             <div className='new-todos'>    
-                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} />)}
+                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} setStages={setStages} />)}
             </div>
         </div>
     ) : (
         <div className="container" id="container-field">
-            <TodoInput />
+            <TodoInput stages={stages} />
         </div>
     )
 }
