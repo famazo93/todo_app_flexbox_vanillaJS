@@ -18,7 +18,7 @@ function Stage(props) {
     }, [stage, user])
 
     const addNewStage = () => {
-        setStages(stage => [...stage, newStageName]);
+        setStages(stage => [...stage.slice(0, stage.length - 1), newStageName, stage[stage.length - 1]]);
     }
 
     const handleChange = (event) => {
@@ -28,7 +28,7 @@ function Stage(props) {
     return todos ? (
         <div className='todo-stage'>
             <div className='stage-name'>{stage} {todos.length > 0 ? `(${todos.length})` : ''}</div>
-            {todos.map((todo) => <Todo key={todo.id} todo={todo} />)}
+            {todos.map((todo) => <Todo user={user} key={todo.id} todo={todo} />)}
             {stage === 'Your stage' ? <NewStageInput addNewStage={addNewStage} handleChange={handleChange} /> : ''}
         </div>
     ) : <div>Loading...</div>

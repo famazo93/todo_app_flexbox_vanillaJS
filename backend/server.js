@@ -17,7 +17,7 @@ app.use(express.urlencoded())
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:5173")
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "GET, POST");
+    res.header("Access-Control-Allow-Methods", "GET, POST, DELETE");
     next()
 })
 
@@ -103,22 +103,22 @@ app.post('/todos/:username', (req, res, next) => {
     })
 })
 
-app.delete('/todos/:id', (req, res, next) => {
+app.delete('/todos/:username/:id', (req, res, next) => {
     fs.readFile('./database/todos.json', 'utf8', (err, data) => {
         if (err) {
             throw err;
         } else {
             const { allTodos } = JSON.parse(data);
             const todoID = req.params.id;
-            const userID = req.session.user.id;
+            const username = req.params.username
             let todoIndex = null;
-            for (let i = 0; i < allTodos[userID].length; i++) {
-                if (allTodos[userID][i].id === todoID) {
+            for (let i = 0; i < allTodos[username].length; i++) {
+                if (allTodos[username][i].id == todoID) {
                     todoIndex = i;
                 }
             }
             if (todoIndex !== null) {
-                allTodos[userID].splice(todoIndex, 1);
+                allTodos[username].splice(todoIndex, 1);
 
                 fs.writeFile('./database/todos.json', JSON.stringify({allTodos}), (err) => {
                     if (err) {
