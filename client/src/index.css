@@ -246,6 +246,15 @@ button {
   color: var(--secondary-accent-blue);
 }
 
+.existingtask-date-input {
+  width: 45%;
+  border: 1px var(--primary-dark-blue) solid;
+  border-radius: 5px;
+  margin: 3px;
+  color: var(--secondary-accent-blue);
+}
+
+
 .newtask-prio-dropdown {
   width: 10%;
   padding: 7px;

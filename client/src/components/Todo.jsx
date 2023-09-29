@@ -1,3 +1,5 @@
+import {useState} from 'react';
+
 function Todo(props) {
     const {todo, user, setTodos} = props;
 
@@ -25,6 +27,27 @@ function Todo(props) {
         setTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo])
     }
 
+    //state to edit todo deadline -> turn deadline div into input field
+    const [editing, setEditing] = useState(false);
+    const toggleEdit = () => {
+        setEditing(true);
+    }
+
+    const handleDeadlineChange = async (event) => {
+        const updatedTodo = {...todo, deadline: event.target.value};
+
+        await fetch(`http://localhost:3000/todos/${user}/${todo.id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(updatedTodo)
+        });
+
+        setTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo]);
+        setEditing(false);
+    }
+
     return (
         <div className="todo-added" id={`${todo.id}`}>
             <div className='todo-top-container'>
@@ -35,7 +58,7 @@ function Todo(props) {
                 <button onClick={removeTodo} id={`remove-${todo.id}`}>X</button>
             </div>
             <div className='todo-bottom-container'>
-                <div className='todo-date'>{todo.deadline}</div>
+                {!editing ? <div onClick={toggleEdit} className='todo-date'>{todo.deadline}</div> : <input onChange={handleDeadlineChange} type='date' name='todo-deadline' className='existingtask-date-input'></input>}
                 <select className={`todo-prio prio-${todo.priority}`} onChange={handlePrioChange}>
                     <option value={todo.priority}>{todo.priority} Prio</option>
                     {priorities.filter(prio => prio !== todo.priority).map(prio => <option key={prio} value={prio}>{prio} Prio</option>)}
