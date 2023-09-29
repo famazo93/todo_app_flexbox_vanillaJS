@@ -17,7 +17,7 @@ function TodoInput(props) {
             id: Date.now(),
             title,
             description,
-            deadline,
+            deadline: deadline.length > 0 ? deadline : 'No Deadline',
             priority,
             stage
         };
@@ -45,9 +45,9 @@ function TodoInput(props) {
             <form id="input-form" action="" onSubmit={handleSubmit}>
                 <input className="newtask-title-input" type="text" id="new-task-title" name="new-task-title" placeholder="Headline" />
                 <input className="newtask-description-input" type="text" id="new-task-description" name="new-task-description" placeholder="Describe your task" />
-                <input className="newtask-date-input" type="date" id="task-deadline" name="task-deadline" />
+                <input className="newtask-date-input" type="date" id="task-deadline" name="task-deadline"/>
                 <select className="newtask-prio-dropdown" name="priority" id="priority">
-                    <option value="">Priority</option>
+                    <option value="No">Priority</option>
                     <option value="High">High</option>
                     <option value="Medium">Medium</option>
                     <option value="Low">Low</option>
