@@ -1,10 +1,12 @@
 function Todo(props) {
-    const {todo, user} = props;
+    const {todo, user, setTodos} = props;
 
     const removeTodo = async () => {
         await fetch(`http://localhost:3000/todos/${user}/${todo.id}`, {
             method: "DELETE"
         })
+
+        setTodos((prevTodos) => prevTodos.filter((prevTodo) => prevTodo.id !== todo.id))
     }
 
     return (

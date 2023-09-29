@@ -75,9 +75,9 @@ app.post('/authentication', (req, res, next) => {
 });
 
 app.post('/todos/:username', (req, res, next) => {
-    const {title, description, deadline, priority, stage} = req.body;
+    const {id, title, description, deadline, priority, stage} = req.body;
     const task = {
-        id: Date.now(),
+        id,
         title,
         description,
         deadline,

@@ -4,12 +4,14 @@ import TodoInput from './TodoInput';
 
 function Todos(props) {
     const {user} = props;
+    const [todos, setTodos] = useState(null);
     const [stages, setStages] = useState(null);
 
     useEffect(() => {
         const getTodos = async () => {
             const response = await fetch(`http://localhost:3000/todo/${user}`);
             const data = await response.json();
+            setTodos(data.todos);
 
             const allStages = [];
             for (let todo of data.todos) {
@@ -25,14 +27,14 @@ function Todos(props) {
 
     return stages ? (
         <div className="todos-container" id="container-field">
-            <TodoInput stages={stages} />
+            <TodoInput stages={stages} setTodos={setTodos} />
             <div className='new-todos'>    
-                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} setStages={setStages} />)}
+                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} setTodos={setTodos} setStages={setStages} />)}
             </div>
         </div>
     ) : (
-        <div className="container" id="container-field">
-            <TodoInput stages={stages} />
+        <div className="todos-container" id="container-field">
+            <TodoInput stages={stages} setTodos={setTodos} />
         </div>
     )
 }

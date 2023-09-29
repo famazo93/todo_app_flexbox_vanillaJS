@@ -1,11 +1,12 @@
 import Cookies from 'js-cookie';
 
 function TodoInput(props) {
-    const {stages} = props;
+    const {stages, setTodos} = props;
 
     const user = Cookies.get('user');
 
     const handleSubmit = async (event) => {
+        event.preventDefault();
         const title = event.target['new-task-title'].value;
         const description = event.target['new-task-description'].value;
         const deadline = event.target['task-deadline'].value;
@@ -13,6 +14,7 @@ function TodoInput(props) {
         const stage = event.target.stage.value;
 
         const newTask = {
+            id: Date.now(),
             title,
             description,
             deadline,
@@ -20,14 +22,18 @@ function TodoInput(props) {
             stage
         };
 
-        await fetch(`http://localhost:3000/todos/${user}`, {
-            method: "POST",
-            body: JSON.stringify(newTask),
-            headers: {
-                "Content-type": "application/json"
-            }
-        })
-
+        if (stage !== 'placeholder') {
+            await fetch(`http://localhost:3000/todos/${user}`, {
+                method: "POST",
+                body: JSON.stringify(newTask),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            })
+            setTodos(prevTodos => [...prevTodos, newTask]);
+        } else {
+            alert('Please select a stage');
+        }
     }
 
 
@@ -47,8 +53,8 @@ function TodoInput(props) {
                     <option value="Low">Low</option>
                     <option value="No">No Prio</option>
                 </select>
-                <select className="newtask-stage-dropdown" name="stage" id="stage">
-                    <option value="">Select a Stage</option>
+                <select className="newtask-stage-dropdown" name="stage" id="stage" required>
+                    <option hidden value='placeholder'>Select a Stage</option>
                     {stages ? stages.filter(stage => stage !== 'Your stage').map(stage => <option key={stage} value={stage}>{stage}</option>) : null}
                 </select>
                 <input type="submit" value="Add task" id="submit" className="newtask-button" />
