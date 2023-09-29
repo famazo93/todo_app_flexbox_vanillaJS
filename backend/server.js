@@ -17,7 +17,7 @@ app.use(express.urlencoded())
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:5173")
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "GET, POST, DELETE");
+    res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
     next()
 })
 
@@ -130,6 +130,49 @@ app.delete('/todos/:username/:id', (req, res, next) => {
             } else {
                 res.status(404).send({state: "todo not found"});
             }
+        }
+    })
+})
+
+app.patch('/todos/:username/:id', (req, res, next) => {
+    fs.readFile('./database/todos.json', 'utf8', (err, data) => {
+        if (err) {
+            throw err;
+        } else {
+            const {allTodos} = JSON.parse(data);
+            const {id, title, description, deadline, priority, stage} = req.body;
+            const todoID = req.params.id;
+            const username = req.params.username;
+
+            let todoIndex = null;
+            for (let i = 0; i < allTodos[username].length; i++) {
+                if (allTodos[username][i].id == todoID) {
+                    todoIndex = i;
+                }
+            }
+            if (todoIndex !== null) {
+                let updatedTodo = {
+                    id,
+                    title: title ? title : allTodos[username][todoIndex].title,
+                    description: description ? description : allTodos[username][todoIndex].description,
+                    deadline: deadline ? deadline : allTodos[username][todoIndex].deadline,
+                    priority: priority ? priority : allTodos[username][todoIndex].priority,
+                    stage: stage ? stage : allTodos[username][todoIndex].stage
+                };
+
+                allTodos[username][todoIndex] = updatedTodo;
+
+                fs.writeFile('./database/todos.json', JSON.stringify({allTodos}), (err) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        res.status(204).send({msg: 'Todo updated'})
+                    }
+                })
+            } else {
+                res.send(404).send({msg: 'todo not found'});
+            }
+
         }
     })
 })

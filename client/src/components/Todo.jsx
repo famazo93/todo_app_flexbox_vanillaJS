@@ -9,6 +9,22 @@ function Todo(props) {
         setTodos((prevTodos) => prevTodos.filter((prevTodo) => prevTodo.id !== todo.id))
     }
 
+    const priorities = ['High', 'Medium', 'Low', 'No'];
+    const handlePrioChange = async (event) => {
+        const updatedTodo = {...todo, priority: event.target.value};
+
+        await fetch(`http://localhost:3000/todos/${user}/${todo.id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(updatedTodo)
+        });
+        
+        setTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo])
+    }
+
     return (
         <div className="todo-added" id={`${todo.id}`}>
             <div className='todo-top-container'>
@@ -19,8 +35,11 @@ function Todo(props) {
                 <button onClick={removeTodo} id={`remove-${todo.id}`}>X</button>
             </div>
             <div className='todo-bottom-container'>
-                <div className="todo-date">{todo.deadline}</div>
-                <div className={`todo-prio prio-${todo.priority}`}>{todo.priority} Prio</div>
+                <div className='todo-date'>{todo.deadline}</div>
+                <select className={`todo-prio prio-${todo.priority}`} onChange={handlePrioChange}>
+                    <option value={todo.priority}>{todo.priority} Prio</option>
+                    {priorities.filter(prio => prio !== todo.priority).map(prio => <option key={prio} value={prio}>{prio} Prio</option>)}
+                </select>
             </div>
 
         </div>
