@@ -5,6 +5,8 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const store = new session.MemoryStore();
 const fs = require('fs');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const PORT = 3000;
 
@@ -60,7 +62,7 @@ app.post('/authentication', (req, res, next) => {
             for (let user of users) {
                 if (user.username === username) {
                     userFound = true;
-                    if (user.password === password) {
+                    if (bcrypt.compare(password, user.password)) {
                         res.send({status: true, msg: "Successful login"});
                     } else {
                         res.send({status: false, wrong: "password"})
@@ -179,43 +181,56 @@ app.patch('/todos/:username/:id', (req, res, next) => {
 
 app.post('/login/newUser', (req, res, next) => {
     const { email, username, password } = req.body;
-    fs.readFile('./database/users.json', 'utf8', (err, data) => {
+    bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) {
             throw err;
         } else {
-            const { users } = JSON.parse(data);
-            const lastId = users[users.length - 1].id;
-            let doesUsernameExist = false;
-            let doesEmailExist = false;
-
-            for (let user of users) {
-                if (user.email === email) {
-                    doesEmailExist = true;
-                };
-                if (user.username === username) {
-                    doesUsernameExist = true;
-                }
-            } 
-
-            if (!doesEmailExist && !doesUsernameExist) {
-                users.push({
-                    id: Number(lastId) + 1,
-                    email,
-                    username,
-                    password
-                })
-                fs.writeFile('./database/users.json', JSON.stringify({users}), (err) => {
-                    if (err) {
-                        throw err
+            fs.readFile('./database/users.json', 'utf8', (err, data) => {
+                if (err) {
+                    throw err;
+                } else {
+                    const { users } = JSON.parse(data);
+                    const lastId = users.length > 0 ? users[users.length - 1].id : 0;
+                    let doesUsernameExist = false;
+                    let doesEmailExist = false;
+        
+                    for (let user of users) {
+                        if (user.email === email) {
+                            doesEmailExist = true;
+                        };
+                        if (user.username === username) {
+                            doesUsernameExist = true;
+                        }
+                    } 
+        
+                    if (!doesEmailExist && !doesUsernameExist) {
+                        users.push({
+                            id: Number(lastId) + 1,
+                            email,
+                            username,
+                            password: hash
+                        })
+                        fs.writeFile('./database/users.json', JSON.stringify({users}), (err) => {
+                            if (err) {
+                                throw err
+                            } else {
+                                res.send({msg: "new user added"});
+                            }
+                        })
                     } else {
-                        res.send({msg: "new user added"});
+                        if (doesUsernameExist) {
+                            res.send({msg: "Username already exists"})
+                        } else {
+                            res.send({msg: "Email address already registered"})
+                        }
                     }
-                })
-            } else {}
+                }
+            })
         }
     })
 })
 
+// needs to be updated
 app.post('/profile/edit/:id', (req, res, next) => {
     fs.readFile('./database/users.json', 'utf8', (err, data) => {
         if (err) {
