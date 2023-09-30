@@ -356,6 +356,32 @@ button {
   overflow: scroll;
 }
 
+.edit-stage-button {
+  font-size: 0.5rem;
+  color: gray;
+  min-height: 1.5rem;
+  min-width: 1.5rem;
+  border: 2px gray solid;
+  border-radius: 50%;
+  transition: 0.2s;
+  position: relative;
+  top: -4%;
+  left: 43%
+}
+
+.edit-stage-button:hover {
+  background-color: lightblue;
+  color: black;
+  transition: 0.2s;
+}
+
+.edit-stage-button:active {
+  font-weight: bold;
+  border: 2px black solid;
+  color: white;
+  background-color: var(--primary-dark-blue)
+}
+
 .stage-name {
   width: 95%;
   text-align: left;
