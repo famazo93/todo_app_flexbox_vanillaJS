@@ -36,7 +36,11 @@ function TodoInput(props) {
         }
     }
 
-
+    const handleLogout = () => {
+        Cookies.remove('authenticated');
+        Cookies.remove('user');
+        window.location = 'http://localhost:5173';
+    }
 
 
     return (
@@ -54,11 +58,12 @@ function TodoInput(props) {
                     <option value="No">No Prio</option>
                 </select>
                 <select className="newtask-stage-dropdown" name="stage" id="stage" required>
-                    <option hidden value='placeholder'>Select a Stage</option>
+                    <option name='stage' hidden value='placeholder'>Select a Stage</option>
                     {stages ? stages.filter(stage => stage !== 'Your stage').map(stage => <option key={stage} value={stage}>{stage}</option>) : null}
                 </select>
                 <input type="submit" value="Add task" id="submit" className="newtask-button" />
             </form>
+            <button type='button' className='logout-button' onClick={handleLogout}>Log out</button>
         </div>
     )
 }

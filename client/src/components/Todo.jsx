@@ -59,7 +59,7 @@ function Todo(props) {
             </div>
             <div className='todo-bottom-container'>
                 {!editing ? <div onClick={toggleEdit} className='todo-date'>{todo.deadline}</div> : <input onChange={handleDeadlineChange} type='date' name='todo-deadline' className='existingtask-date-input'></input>}
-                <select className={`todo-prio prio-${todo.priority}`} onChange={handlePrioChange}>
+                <select name='select-prio' className={`todo-prio prio-${todo.priority}`} onChange={handlePrioChange}>
                     <option value={todo.priority}>{todo.priority} Prio</option>
                     {priorities.filter(prio => prio !== todo.priority).map(prio => <option key={prio} value={prio}>{prio} Prio</option>)}
                 </select>

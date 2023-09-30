@@ -185,10 +185,41 @@ button {
   text-align: left;
 }
 
+/* Todo page */
 .todos-container {
   width: 97%;
   height: 95%;
   border: 2px white solid;
+}
+
+.logout-button {
+  border: 1px var(--secondary-accent-blue) solid;
+  border-radius: 5px;
+  width: 10%;
+  padding: 7px;
+  margin: 5px;
+  color: var(--secondary-accent-blue);
+  transition: 0.5s;
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: none;
+  position: absolute;
+  top: 3%;
+  right: 2%;
+}
+
+.logout-button:hover {
+  cursor: pointer;
+  width: 12%;
+  transition: 0.5s;
+  font-size: 1.1rem;
+}
+
+.logout-button:active {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 12%;
+  transition: 0.2s;
+  font-size: 1.1rem;
 }
 
 .todo {

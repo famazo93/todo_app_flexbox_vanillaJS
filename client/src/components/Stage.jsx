@@ -4,7 +4,7 @@ import NewStageInput from './NewStageInput';
 
 function Stage(props) {
     const {stage, user, setStages, todos, setTodos} = props;
-    const [stageTodos, setStageTodos] = useState(null);
+    const [stageTodos, setStageTodos] = useState([]);
     const [newStageName, setNewStageName] = useState(null);
 
     useEffect(() => {

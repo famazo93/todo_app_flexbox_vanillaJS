@@ -92,7 +92,7 @@ app.post('/todos/:username', (req, res, next) => {
             throw err;
         } else {
             const { allTodos } = JSON.parse(data);
-            allTodos[`${user}`].push(task);
+            allTodos[`${user}`] ? allTodos[`${user}`].push(task) : allTodos[`${user}`] = [task];
 
             fs.writeFile('./database/todos.json', JSON.stringify({allTodos}), (err) => {
                 if (err) {

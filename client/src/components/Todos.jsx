@@ -5,7 +5,7 @@ import TodoInput from './TodoInput';
 function Todos(props) {
     const {user} = props;
     const [todos, setTodos] = useState(null);
-    const [stages, setStages] = useState(null);
+    const [stages, setStages] = useState(['To Start', 'In Progress', 'Done', 'Your stage']);
 
     useEffect(() => {
         const getTodos = async () => {
@@ -13,19 +13,23 @@ function Todos(props) {
             const data = await response.json();
             setTodos(data.todos);
 
-            const allStages = [];
-            for (let todo of data.todos) {
-                allStages.push(todo.stage);
+            if (data.todos) {
+                const allStages = [...stages.slice(0, stages.length - 1)];
+                for (let todo of data.todos) {
+                    allStages.push(todo.stage);
+                }
+                allStages.push('Your stage');
+                const uniqueStages = [... new Set(allStages)];
+                setStages(uniqueStages);
+            } else {
+                setTodos([]);
             }
-            allStages.push('Your stage');
-            const uniqueStages = [... new Set(allStages)];
-            setStages(uniqueStages);
         };
 
         getTodos();
     }, [user])
 
-    return stages ? (
+    return todos ? (
         <div className="todos-container" id="container-field">
             <TodoInput stages={stages} setTodos={setTodos} />
             <div className='new-todos'>    
