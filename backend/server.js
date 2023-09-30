@@ -1,18 +1,16 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 const morgan = require('morgan');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const store = new session.MemoryStore();
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const env = require('dotenv');
+env.config();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(morgan('dev'));
-app.use(cookieParser());
-
 app.use(express.json());
 app.use(express.urlencoded())
 
@@ -230,47 +228,13 @@ app.post('/login/newUser', (req, res, next) => {
     })
 })
 
-// needs to be updated
-app.post('/profile/edit/:id', (req, res, next) => {
-    fs.readFile('./database/users.json', 'utf8', (err, data) => {
-        if (err) {
-            throw err;
-        } else {
-            const { users } = JSON.parse(data);
-            const userID = req.params.id;
-            const { username, passwordOld, passwordNew, _method } = req.body;
-            let userIndex = null;
-            for (let i = 0; i < users.length; i++) {
-                if (Number(users[i].id) === Number(userID)) {
-                    userIndex = i;
-                }
-            }
-            if (_method === 'PATCH') {
-                if (userIndex !== null) {
-                    if (users[userIndex].password === passwordOld) {
-                        users[userIndex] = {
-                            id: users[userIndex].id,
-                            username: username ? username : users[userIndex].username,
-                            password: passwordNew ? passwordNew : users[userIndex].password
-                        }
-
-                        fs.writeFile('./database/users.json', JSON.stringify({users}), (err) => {
-                            if (err) {
-                                throw err;
-                            } else {
-                                res.status(200).redirect('http://localhost:3000/todos')
-                            }
-                        })
-                    } else {
-                        res.status(403).send({state: 'wrong password'});
-                    }
-                } else {
-                    res.status(404).send({state: 'user not found'});
-                }
-            }
-        }
+//Server production assets
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join("../client/dist")))
+    app.get("*", (req, res, next) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
     })
-})
+}
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

@@ -22,6 +22,7 @@ function Stage(props) {
     return stageTodos ? (
         <div className='todo-stage'>
             <div className='stage-name'>{stage} {stageTodos.length > 0 ? `(${stageTodos.length})` : ''}</div>
+            <button className='edit-stage-button' type='button'>•••</button>
             {stageTodos.map((todo) => <Todo user={user} key={todo.id} todo={todo} setTodos={setTodos} />)}
             {stage === 'Your stage' ? <NewStageInput addNewStage={addNewStage} handleChange={handleChange} /> : ''}
         </div>
