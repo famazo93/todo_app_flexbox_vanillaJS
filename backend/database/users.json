@@ -1,1 +1,16 @@
-{"users":[{"id":2,"email":"fam@azo.com","username":"famazo","password":"$2b$10$qjooQ3AptkYXaUeNAN7OtujMdIV/pZpQvVkN6B71RhsT6Eajhi1he"},{"id":3,"email":"test@test.com","username":"test","password":"$2b$10$JehTHudoeDgmNxXbNdAK9uPbjXzobBqozvF6fuJKGcqAl5gaV2bNu"}]}
+{
+    "users": [
+        {
+            "id": 2,
+            "email": "fam@azo.com",
+            "username": "famazo",
+            "password": "$2b$10$qjooQ3AptkYXaUeNAN7OtujMdIV/pZpQvVkN6B71RhsT6Eajhi1he"
+        },
+        {
+            "id": 3,
+            "email": "test@test.com",
+            "username": "test",
+            "password": "$2b$10$JehTHudoeDgmNxXbNdAK9uPbjXzobBqozvF6fuJKGcqAl5gaV2bNu"
+        }
+    ]
+}

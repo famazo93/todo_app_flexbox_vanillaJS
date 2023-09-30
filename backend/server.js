@@ -8,6 +8,10 @@ const saltRounds = 10;
 const env = require('dotenv');
 env.config();
 
+const mongoose = require('mongoose');
+const User = require('./model/User.js');
+const Todo = require('./model/Todo.js');
+
 const PORT = process.env.PORT || 3000;
 
 app.use(morgan('dev'));
@@ -21,211 +25,125 @@ app.use(function (req, res, next) {
     next()
 })
 
-app.get('/todo/:username', (req, res, next) => {
-    const username = req.params.username;
-    fs.readFile('./database/todos.json', 'utf8', (err, data) => {
-        if (err) {
-            throw err;
-        } else {
-            const {allTodos} = JSON.parse(data);
-            const todos = {
-                todos: allTodos[`${username}`]
-            }
-            res.send(todos);
-        }
-    })
-})
-
-app.get('/todo/:username/:stage', (req, res, next) => {
-    const {username, stage} = req.params;
-    fs.readFile('./database/todos.json', 'utf8', (err, data) => {
-        if (err) {
-            throw err;
-        } else {
-            const {allTodos} = JSON.parse(data);
-            const userTodos = allTodos[`${username}`].filter(todo => todo.stage === stage);
-            res.send(userTodos);
-        }
-    })
-})
-
-app.post('/authentication', (req, res, next) => {
-    const {username, password} = req.body.userToCheck;
-    fs.readFile('./database/users.json', 'utf8', (err, data) => {
-        if (err) {
-            throw err;
-        } else {
-            const {users} = JSON.parse(data);
-            let userFound = false;
-            for (let user of users) {
-                if (user.username === username) {
-                    userFound = true;
-                    if (bcrypt.compare(password, user.password)) {
-                        res.send({status: true, msg: "Successful login"});
-                    } else {
-                        res.send({status: false, wrong: "password"})
-                    };
-                }
-            };
-            if (!userFound) {
-                res.send({status: false, wrong: "username"});
-            }
-        }
-    })
-});
-
-app.post('/todos/:username', (req, res, next) => {
-    const {id, title, description, deadline, priority, stage} = req.body;
-    const task = {
-        id,
-        title,
-        description,
-        deadline,
-        priority,
-        stage
+app.get('/todo/:username', async (req, res, next) => {
+    try {
+        const username = req.params.username;
+        const todos = await Todo.find({user: username});
+        res.send({todos})
+    } catch (err) {
+        console.log(err);
     }
-    const user = req.params.username;
-    fs.readFile('./database/todos.json', 'utf8', (err, data) => {
-        if (err) {
-            throw err;
-        } else {
-            const { allTodos } = JSON.parse(data);
-            allTodos[`${user}`] ? allTodos[`${user}`].push(task) : allTodos[`${user}`] = [task];
-
-            fs.writeFile('./database/todos.json', JSON.stringify({allTodos}), (err) => {
-                if (err) {
-                    throw err;
-                } else {
-                    res.status(200).send();
-                }
-            })
-        }
-    })
 })
 
-app.delete('/todos/:username/:id', (req, res, next) => {
-    fs.readFile('./database/todos.json', 'utf8', (err, data) => {
-        if (err) {
-            throw err;
-        } else {
-            const { allTodos } = JSON.parse(data);
-            const todoID = req.params.id;
-            const username = req.params.username
-            let todoIndex = null;
-            for (let i = 0; i < allTodos[username].length; i++) {
-                if (allTodos[username][i].id == todoID) {
-                    todoIndex = i;
-                }
-            }
-            if (todoIndex !== null) {
-                allTodos[username].splice(todoIndex, 1);
-
-                fs.writeFile('./database/todos.json', JSON.stringify({allTodos}), (err) => {
-                    if (err) {
-                        throw err;
-                    } else {
-                        res.status(204).send({status: "DONE"});
-                    }
-                })
-            } else {
-                res.status(404).send({state: "todo not found"});
-            }
-        }
-    })
+app.get('/todo/:username/:stage', async (req, res, next) => {
+    try {
+        const {username, stage} = req.params;
+        const todos = await Todo.find({user: username, stage: stage});
+        res.send({todos});
+    } catch (err) {
+        console.log(err);
+    }
 })
 
-app.patch('/todos/:username/:id', (req, res, next) => {
-    fs.readFile('./database/todos.json', 'utf8', (err, data) => {
-        if (err) {
-            throw err;
+app.post('/authentication', async (req, res, next) => {
+    const {username, password} = req.body.userToCheck;
+    const user = await User.findOne({username: username});
+
+    if (user) {
+        if (bcrypt.compare(password, user.password)) {
+            res.send({status: true, msg: "Successful login"});
         } else {
-            const {allTodos} = JSON.parse(data);
-            const {id, title, description, deadline, priority, stage} = req.body;
-            const todoID = req.params.id;
-            const username = req.params.username;
-
-            let todoIndex = null;
-            for (let i = 0; i < allTodos[username].length; i++) {
-                if (allTodos[username][i].id == todoID) {
-                    todoIndex = i;
-                }
-            }
-            if (todoIndex !== null) {
-                let updatedTodo = {
-                    id,
-                    title: title ? title : allTodos[username][todoIndex].title,
-                    description: description ? description : allTodos[username][todoIndex].description,
-                    deadline: deadline ? deadline : allTodos[username][todoIndex].deadline,
-                    priority: priority ? priority : allTodos[username][todoIndex].priority,
-                    stage: stage ? stage : allTodos[username][todoIndex].stage
-                };
-
-                allTodos[username][todoIndex] = updatedTodo;
-
-                fs.writeFile('./database/todos.json', JSON.stringify({allTodos}), (err) => {
-                    if (err) {
-                        throw err;
-                    } else {
-                        res.status(204).send({msg: 'Todo updated'})
-                    }
-                })
-            } else {
-                res.send(404).send({msg: 'todo not found'});
-            }
-
+            res.send({status: false, wrong: "password"});
         }
-    })
+    } else {
+        res.send({status: false, wrong: "username"});
+    }
 })
 
-app.post('/login/newUser', (req, res, next) => {
+app.post('/todos/:username', async (req, res, next) => {
+    try {
+        const {id, title, description, deadline, priority, stage} = req.body;
+        const task = {
+            id,
+            user: req.params.username,
+            title,
+            description,
+            deadline,
+            priority,
+            stage
+        };
+
+        await Todo.create(task);
+        res.status(200).send();
+    } catch (err) {
+        console.log(err);
+    }
+    
+})
+
+app.delete('/todos/:username/:id', async (req, res, next) => {
+    try {
+        await Todo.findOneAndDelete({user: req.params.username, id: req.params.id});
+        res.status(204).send({status: "DONE"});
+    } catch (err) {
+        console.log(err);
+    }
+})
+
+app.patch('/todos/:username/:id', async (req, res, next) => {
+    try {
+        const {id, title, description, deadline, priority, stage} = req.body;
+        const todo = await Todo.findOne({id: id});
+        const newTodo = {
+            id,
+            title: title ? title : todo.title,
+            description: description ? description : todo.description,
+            deadline: deadline ? deadline : todo.deadline,
+            priority: priority ? priority : todo.priority,
+            stage: stage ? stage : todo.stage
+        }
+
+        await Todo.findOneAndReplace({id: id}, newTodo);
+    } catch (err) {
+        console.log(err);
+    }
+})
+
+app.post('/login/newUser', async (req, res, next) => {
     const { email, username, password } = req.body;
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-        if (err) {
-            throw err;
-        } else {
-            fs.readFile('./database/users.json', 'utf8', (err, data) => {
-                if (err) {
-                    throw err;
-                } else {
-                    const { users } = JSON.parse(data);
-                    const lastId = users.length > 0 ? users[users.length - 1].id : 0;
-                    let doesUsernameExist = false;
-                    let doesEmailExist = false;
-        
-                    for (let user of users) {
-                        if (user.email === email) {
-                            doesEmailExist = true;
-                        };
-                        if (user.username === username) {
-                            doesUsernameExist = true;
-                        }
-                    } 
-        
-                    if (!doesEmailExist && !doesUsernameExist) {
-                        users.push({
-                            id: Number(lastId) + 1,
-                            email,
-                            username,
-                            password: hash
-                        })
-                        fs.writeFile('./database/users.json', JSON.stringify({users}), (err) => {
-                            if (err) {
-                                throw err
-                            } else {
-                                res.send({msg: "new user added"});
-                            }
-                        })
-                    } else {
-                        if (doesUsernameExist) {
-                            res.send({msg: "Username already exists"})
-                        } else {
-                            res.send({msg: "Email address already registered"})
-                        }
-                    }
-                }
-            })
+    const users = await User.find();
+    const lastId = users.length > 0 ? users[users.length - 1].id : 0;
+    const newId = Number(lastId) + 1;
+
+    let doesUsernameExist = false;
+    let doesEmailExist = false;
+
+    for (let user of users) {
+        if (user.email === email) {
+            doesEmailExist = true;
+        };
+        if (user.username === username) {
+            doesUsernameExist = true;
         }
-    })
+    }
+    if (!doesEmailExist && !doesUsernameExist) {
+        bcrypt.hash(password, saltRounds, async (err, hash) => {
+            const newUser = {
+                id: newId.toString(),
+                email,
+                username,
+                password: hash
+            };
+            await User.create(newUser);
+            res.send({msg: "new user added"})
+        })
+    } else {
+        if (doesUsernameExist) {
+            res.send({msg: "Username already exists"});
+        } else {
+            res.send({msg: "Email address already registered"});
+        }
+    }
 })
 
 //Server production assets
@@ -236,6 +154,11 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+mongoose.connect(process.env.MONGO_KEY).then(() => {
+    console.log('Connection to the database successful!');
+    app.listen(PORT, () => {
+        console.log(`App is running on port: ${PORT}`);
+    })
+}).catch((err) => {
+    console.log(err);
 })
