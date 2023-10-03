@@ -33,7 +33,7 @@ function Todos(props) {
         <div className="todos-container" id="container-field">
             <TodoInput stages={stages} setTodos={setTodos} />
             <div className='new-todos'>    
-                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} setTodos={setTodos} stages={stages} setStages={setStages} />)}
+                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} stages={stages} setStages={setStages} />)}
             </div>
         </div>
     ) : (

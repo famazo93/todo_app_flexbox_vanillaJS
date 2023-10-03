@@ -20,7 +20,7 @@ app.use(express.urlencoded())
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:5173")
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-type, Accept");
     res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
     next()
 })
@@ -72,7 +72,6 @@ app.post('/todos/:username', async (req, res, next) => {
             priority,
             stage
         };
-
         await Todo.create(task);
         res.status(200).send();
     } catch (err) {
@@ -96,14 +95,16 @@ app.patch('/todos/:username/:id', async (req, res, next) => {
         const todo = await Todo.findOne({id: id});
         const newTodo = {
             id,
+            user: req.params.username,
             title: title ? title : todo.title,
             description: description ? description : todo.description,
             deadline: deadline ? deadline : todo.deadline,
             priority: priority ? priority : todo.priority,
-            stage: stage ? stage : todo.stage
+            stage: stage ? stage : todo.stage,
         }
 
         await Todo.findOneAndReplace({id: id}, newTodo);
+        res.send({msg: "OK"});
     } catch (err) {
         console.log(err);
     }

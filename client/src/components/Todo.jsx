@@ -1,14 +1,14 @@
 import {useState} from 'react';
 
 function Todo(props) {
-    const {todo, user, setTodos} = props;
+    const {todo, user, setStageTodos} = props;
 
     const removeTodo = async () => {
         await fetch(`http://localhost:3000/todos/${user}/${todo.id}`, {
             method: "DELETE"
         })
 
-        setTodos((prevTodos) => prevTodos.filter((prevTodo) => prevTodo.id !== todo.id))
+        setStageTodos((prevTodos) => prevTodos.filter((prevTodo) => prevTodo.id !== todo.id))
     }
 
     const priorities = ['High', 'Medium', 'Low', 'No'];
@@ -17,14 +17,12 @@ function Todo(props) {
 
         await fetch(`http://localhost:3000/todos/${user}/${todo.id}`, {
             method: "PATCH",
+            body: JSON.stringify(updatedTodo),
             headers: {
-                "Content-type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(updatedTodo)
+                "Content-type": "application/json"
+            }
         });
-        
-        setTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo])
+        setStageTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo])
     }
 
     //state to edit todo deadline -> turn deadline div into input field
@@ -44,7 +42,7 @@ function Todo(props) {
             body: JSON.stringify(updatedTodo)
         });
 
-        setTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo]);
+        setStageTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo]);
         setEditing(false);
     }
 
