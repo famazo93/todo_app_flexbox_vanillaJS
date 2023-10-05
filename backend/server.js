@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded())
 
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:5173")
+    res.header("Access-Control-Allow-Origin", "*")
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-type, Accept");
     res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
     next()
@@ -32,6 +32,7 @@ app.get('/todo/:username', async (req, res, next) => {
         res.send({todos})
     } catch (err) {
         console.log(err);
+        res.status(500).json({msg: "Something went wrong"});
     }
 })
 
@@ -42,6 +43,7 @@ app.get('/todo/:username/:stage', async (req, res, next) => {
         res.send({todos});
     } catch (err) {
         console.log(err);
+        res.status(500).json({msg: "Something went wrong"});
     }
 })
 
@@ -76,6 +78,7 @@ app.post('/todos/:username', async (req, res, next) => {
         res.status(200).send();
     } catch (err) {
         console.log(err);
+        res.status(500).json({msg: "Something went wrong"});
     }
     
 })
@@ -86,6 +89,7 @@ app.delete('/todos/:username/:id', async (req, res, next) => {
         res.status(204).send({status: "DONE"});
     } catch (err) {
         console.log(err);
+        res.status(500).json({msg: "Something went wrong"});
     }
 })
 
@@ -107,6 +111,7 @@ app.patch('/todos/:username/:id', async (req, res, next) => {
         res.send({msg: "OK"});
     } catch (err) {
         console.log(err);
+        res.status(500).json({msg: "Something went wrong"});
     }
 })
 
