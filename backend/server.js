@@ -156,7 +156,7 @@ app.post('/login/newUser', async (req, res, next) => {
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join("../client/dist")))
     app.get("*", (req, res, next) => {
-        res.sendFile(path.resolve(__dirname, '..', 'client', 'dist'))
+        res.sendFile(path.resolve('client', 'dist', 'index.html'))
     })
 }
 
