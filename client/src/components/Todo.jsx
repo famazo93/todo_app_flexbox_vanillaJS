@@ -4,7 +4,7 @@ function Todo(props) {
     const {todo, user, setStageTodos} = props;
 
     const removeTodo = async () => {
-        await fetch(`http://localhost:3000/todos/${user}/${todo.id}`, {
+        await fetch(`/todos/${user}/${todo.id}`, {
             method: "DELETE"
         })
 
@@ -15,7 +15,7 @@ function Todo(props) {
     const handlePrioChange = async (event) => {
         const updatedTodo = {...todo, priority: event.target.value};
 
-        await fetch(`http://localhost:3000/todos/${user}/${todo.id}`, {
+        await fetch(`/todos/${user}/${todo.id}`, {
             method: "PATCH",
             body: JSON.stringify(updatedTodo),
             headers: {
@@ -34,7 +34,7 @@ function Todo(props) {
     const handleDeadlineChange = async (event) => {
         const updatedTodo = {...todo, deadline: event.target.value};
 
-        await fetch(`http://localhost:3000/todos/${user}/${todo.id}`, {
+        await fetch(`/todos/${user}/${todo.id}`, {
             method: "PATCH",
             headers: {
                 "Content-type": "application/json"

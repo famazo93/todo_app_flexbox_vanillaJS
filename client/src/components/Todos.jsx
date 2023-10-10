@@ -9,7 +9,7 @@ function Todos(props) {
 
     useEffect(() => {
         const getTodos = async () => {
-            const response = await fetch(`http://localhost:3000/todo/${user}`);
+            const response = await fetch(`/todo/${user}`);
             const data = await response.json();
             setTodos(data.todos);
 

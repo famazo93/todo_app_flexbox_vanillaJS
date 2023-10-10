@@ -23,7 +23,7 @@ function TodoInput(props) {
         };
 
         if (stage !== 'placeholder') {
-            await fetch(`http://localhost:3000/todos/${user}`, {
+            await fetch(`/todos/${user}`, {
                 method: "POST",
                 body: JSON.stringify(newTask),
                 headers: {
@@ -39,7 +39,7 @@ function TodoInput(props) {
     const handleLogout = () => {
         Cookies.remove('authenticated');
         Cookies.remove('user');
-        window.location = 'http://localhost:5173';
+        window.location = window.location = location.protocol + '//' + location.host + location.pathname;
     }
 
 

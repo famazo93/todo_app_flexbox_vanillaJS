@@ -15,7 +15,7 @@ function LoginForm() {
             }
         };
 
-        const response = await fetch('http://localhost:3000/authentication', {
+        const response = await fetch('/authentication', {
             method: "POST",
             body: JSON.stringify(userToCheck),
             headers: {
@@ -27,7 +27,7 @@ function LoginForm() {
         if (status) {
             Cookies.set('authenticated', true, {expires: 1000 * 60 * 60 * 24});
             Cookies.set('user', userToCheck.userToCheck.username, {expires: 1000 * 60 * 60 * 24})
-            window.location = 'http://localhost:5173'
+            window.location = location.protocol + '//' + location.host + location.pathname;
         } else if (wrong === 'password') {
             setWrongPassword(true);
         } else if (wrong === 'username') {
