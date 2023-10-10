@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const User = require('./model/User.js');
 const Todo = require('./model/Todo.js');
 
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -162,8 +162,8 @@ if (process.env.NODE_ENV === 'production') {
 
 mongoose.connect(process.env.MONGO_KEY).then(() => {
     console.log('Connection to the database successful!');
-    app.listen(PORT, () => {
-        console.log(`App is running on port: ${PORT}`);
+    app.listen(port, () => {
+        console.log(`App is running on port: ${port}`);
     })
 }).catch((err) => {
     console.log(err);
