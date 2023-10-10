@@ -156,12 +156,14 @@ app.post('/login/newUser', async (req, res, next) => {
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join("../client/dist")))
 
-    app.get('https://famazo-todo.adaptable.app/assets/:filename', (req, res, next) => {
-        const filename = req.params.filename
+    app.get('/assets/:filename', (req, res, next) => {
+        const filename = req.params.filename;
+        console.log(filename);
         res.sendFile(path.resolve('client', 'dist', filename))
     })
 
     app.get("*", (req, res, next) => {
+        console.log('Wrong path')
         res.sendFile(path.resolve('client', 'dist', 'index.html'))
     })
 }
