@@ -154,7 +154,11 @@ app.post('/login/newUser', async (req, res, next) => {
 
 //Server production assets
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static("../client/dist"))
+    app.use(express.static(path.join(__dirname, "../client/dist")));
+
+    app.get('*', (req, res, next) => {
+        res.sendFile(path.join(__dirname, "../client/dist/index.html"))
+    })
 }
 
 mongoose.connect(process.env.MONGO_KEY).then(() => {
