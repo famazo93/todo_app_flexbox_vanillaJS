@@ -155,6 +155,12 @@ app.post('/login/newUser', async (req, res, next) => {
 //Server production assets
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join("../client/dist")))
+
+    app.get('/assets/:filename', (req, res, next) => {
+        const filename = req.params.filename
+        res.sendFile(path.resolve('client', 'dist', filename))
+    })
+
     app.get("*", (req, res, next) => {
         res.sendFile(path.resolve('client', 'dist', 'index.html'))
     })
