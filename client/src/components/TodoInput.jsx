@@ -34,6 +34,7 @@ function TodoInput(props) {
         } else {
             alert('Please select a stage');
         }
+        event.target.reset();
     }
 
     const handleLogout = () => {
