@@ -25,7 +25,7 @@ app.use(function (req, res, next) {
     next()
 })
 
-app.get('/todo/:username', async (req, res, next) => {
+app.get('/api/todo/:username', async (req, res, next) => {
     try {
         const username = req.params.username;
         const todos = await Todo.find({user: username});
@@ -36,7 +36,7 @@ app.get('/todo/:username', async (req, res, next) => {
     }
 })
 
-app.get('/todo/:username/:stage', async (req, res, next) => {
+app.get('/api/todo/:username/:stage', async (req, res, next) => {
     try {
         const {username, stage} = req.params;
         const todos = await Todo.find({user: username, stage: stage});
@@ -47,7 +47,7 @@ app.get('/todo/:username/:stage', async (req, res, next) => {
     }
 })
 
-app.post('/authentication', async (req, res, next) => {
+app.post('/api/authentication', async (req, res, next) => {
     const {username, password} = req.body.userToCheck;
     const user = await User.findOne({username: username});
 
@@ -62,7 +62,7 @@ app.post('/authentication', async (req, res, next) => {
     }
 })
 
-app.post('/todos/:username', async (req, res, next) => {
+app.post('/api/todos/:username', async (req, res, next) => {
     try {
         const {id, title, description, deadline, priority, stage} = req.body;
         const task = {
@@ -83,7 +83,7 @@ app.post('/todos/:username', async (req, res, next) => {
     
 })
 
-app.delete('/todos/:username/:id', async (req, res, next) => {
+app.delete('/api/todos/:username/:id', async (req, res, next) => {
     try {
         await Todo.findOneAndDelete({user: req.params.username, id: req.params.id});
         res.status(204).send({status: "DONE"});
@@ -93,7 +93,7 @@ app.delete('/todos/:username/:id', async (req, res, next) => {
     }
 })
 
-app.patch('/todos/:username/:id', async (req, res, next) => {
+app.patch('/api/todos/:username/:id', async (req, res, next) => {
     try {
         const {id, title, description, deadline, priority, stage} = req.body;
         const todo = await Todo.findOne({id: id});
@@ -115,7 +115,7 @@ app.patch('/todos/:username/:id', async (req, res, next) => {
     }
 })
 
-app.post('/login/newUser', async (req, res, next) => {
+app.post('/api/login/newUser', async (req, res, next) => {
     const { email, username, password } = req.body;
     const users = await User.find();
     const lastId = users.length > 0 ? users[users.length - 1].id : 0;

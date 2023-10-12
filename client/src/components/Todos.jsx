@@ -9,7 +9,7 @@ function Todos(props) {
 
     useEffect(() => {
         const getTodos = async () => {
-            const response = await fetch(`/todo/${user}`);
+            const response = await fetch(`/api/todo/${user}`);
             const data = await response.json();
             setTodos(data.todos);
 
@@ -33,7 +33,7 @@ function Todos(props) {
         <div className="todos-container" id="container-field">
             <TodoInput stages={stages} setTodos={setTodos} />
             <div className='new-todos'>    
-                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} stages={stages} setStages={setStages} />)}
+                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} setTodos={setTodos} stages={stages} setStages={setStages} />)}
             </div>
         </div>
     ) : (

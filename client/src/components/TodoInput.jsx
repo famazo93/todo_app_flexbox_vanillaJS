@@ -23,7 +23,7 @@ function TodoInput(props) {
         };
 
         if (stage !== 'placeholder') {
-            await fetch(`/todos/${user}`, {
+            await fetch(`/api/todos/${user}`, {
                 method: "POST",
                 body: JSON.stringify(newTask),
                 headers: {

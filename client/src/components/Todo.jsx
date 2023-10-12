@@ -1,28 +1,28 @@
 import {useState} from 'react';
 
 function Todo(props) {
-    const {todo, user, setStageTodos} = props;
+    const {todo, user, setTodos} = props;
 
     const removeTodo = async () => {
-        await fetch(`/todos/${user}/${todo.id}`, {
+        await fetch(`/api/todos/${user}/${todo.id}`, {
             method: "DELETE"
         })
 
-        setStageTodos((prevTodos) => prevTodos.filter((prevTodo) => prevTodo.id !== todo.id))
+        setTodos((prevTodos) => prevTodos.filter((prevTodo) => prevTodo.id !== todo.id))
     }
 
     const priorities = ['High', 'Medium', 'Low', 'No'];
     const handlePrioChange = async (event) => {
         const updatedTodo = {...todo, priority: event.target.value};
 
-        await fetch(`/todos/${user}/${todo.id}`, {
+        await fetch(`/api/todos/${user}/${todo.id}`, {
             method: "PATCH",
             body: JSON.stringify(updatedTodo),
             headers: {
                 "Content-type": "application/json"
             }
         });
-        setStageTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo])
+        setTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo])
     }
 
     //state to edit todo deadline -> turn deadline div into input field
@@ -34,7 +34,7 @@ function Todo(props) {
     const handleDeadlineChange = async (event) => {
         const updatedTodo = {...todo, deadline: event.target.value};
 
-        await fetch(`/todos/${user}/${todo.id}`, {
+        await fetch(`/api/todos/${user}/${todo.id}`, {
             method: "PATCH",
             headers: {
                 "Content-type": "application/json"
@@ -42,7 +42,7 @@ function Todo(props) {
             body: JSON.stringify(updatedTodo)
         });
 
-        setStageTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo]);
+        setTodos((prevTodos) => [...prevTodos.filter(prevTodo => prevTodo.id !== todo.id), updatedTodo]);
         setEditing(false);
     }
 

@@ -10,7 +10,7 @@ function SignupForm(props) {
             password: password.value
         };
 
-        await fetch('/login/newUser', {
+        await fetch('/api/login/newUser', {
             method: "POST",
             body: JSON.stringify(newUser),
             headers: {
