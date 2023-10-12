@@ -27,6 +27,7 @@ function Todo(props) {
 
     //state to edit todo deadline -> turn deadline div into input field
     const [editing, setEditing] = useState(false);
+
     const toggleEdit = () => {
         setEditing(true);
     }
@@ -56,13 +57,12 @@ function Todo(props) {
                 <button onClick={removeTodo} id={`remove-${todo.id}`}>X</button>
             </div>
             <div className='todo-bottom-container'>
-                {!editing ? <div onClick={toggleEdit} className='todo-date'>{todo.deadline}</div> : <input onChange={handleDeadlineChange} type='date' name='todo-deadline' className='existingtask-date-input'></input>}
+                {!editing ? <div onClick={toggleEdit} className='todo-date'>{todo.deadline}</div> : <input value={todo.deadline} onChange={handleDeadlineChange} type='date' name='todo-deadline' className='existingtask-date-input'></input>}
                 <select name='select-prio' className={`todo-prio prio-${todo.priority}`} onChange={handlePrioChange}>
                     <option value={todo.priority}>{todo.priority} Prio</option>
                     {priorities.filter(prio => prio !== todo.priority).map(prio => <option key={prio} value={prio}>{prio} Prio</option>)}
                 </select>
             </div>
-
         </div>
     )
 }
