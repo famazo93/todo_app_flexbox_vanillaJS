@@ -25,7 +25,7 @@ function Landing() {
             </div>
             <div className='signup-container'>
                 <div className='signup-box'>
-                    {login ? <LoginForm /> : !submitted ? <SignupForm setSubmitted={setSubmitted} /> : (
+                    {login ? <><LoginForm /><button className='signup-button' type='button' onClick={() => setLogin(false)}>Back</button> </> : !submitted ? <SignupForm setSubmitted={setSubmitted} /> : (
                             <div className='signup-title'>Thank you for registering! Now you can sign in.</div>
                         )}
                 </div>
