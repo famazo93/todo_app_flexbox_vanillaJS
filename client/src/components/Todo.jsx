@@ -48,7 +48,7 @@ function Todo(props) {
     }
 
     return (
-        <div className="todo-added" id={`${todo.id}`}>
+        <div className="todo-added" id={`${todo.id}`} onMouseLeave={() => setEditing(false)}>
             <div className='todo-top-container'>
                 <div className='todo-top-text-container'>
                     <div className='todo-title'>{todo.title}</div>

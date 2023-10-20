@@ -21,3 +21,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Production config - working version in repo, untracked for development
+/client/vite.config.js
