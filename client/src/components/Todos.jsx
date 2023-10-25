@@ -31,12 +31,17 @@ function Todos(props) {
         getTodos();
     }, [user])
 
+    const handleDrop = async (droppedTodo, stage) => {
+        droppedTodo.stage = stage;
+        setTodos([...todos.filter(todo => todo.id !== droppedTodo.id), droppedTodo]);
+    }
+
     return todos ? (
         <DndProvider backend={HTML5Backend}>
             <div className="todos-container" id="container-field">
                 <TodoInput stages={stages} setTodos={setTodos} />
                 <div className='new-todos'>    
-                    {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} setTodos={setTodos} stages={stages} setStages={setStages} />)}
+                    {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} setTodos={setTodos} stages={stages} setStages={setStages} onDrop={handleDrop}/>)}
                 </div>
             </div>
         </DndProvider>

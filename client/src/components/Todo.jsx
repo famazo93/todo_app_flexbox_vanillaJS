@@ -8,11 +8,9 @@ function Todo(props) {
     const [{isDragging}, drag] = useDrag(() => ({
         type: ItemTypes.TODO,
         item: {todo},
-        beginDrag: () => ({todo}),
         end: (item, monitor) => {
             const dropResult = monitor.getDropResult()
-            console.log(dropResult);
-            handleStageChange(dropResult.stage);
+            handleStageChange(dropResult.draggedTodo.todo.stage);
         },
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),

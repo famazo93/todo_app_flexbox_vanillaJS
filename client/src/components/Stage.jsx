@@ -5,21 +5,19 @@ import { ItemTypes } from '../util/Constants';
 import { useDrop } from 'react-dnd'
 
 function Stage(props) {
-    const {stage, user, setStages, todos, setTodos} = props;
+    const {stage, user, setStages, todos, setTodos, onDrop} = props;
     const [stageTodos, setStageTodos] = useState([]);
     const [newStageName, setNewStageName] = useState(null);
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.TODO,
-        drop: () => ({stage: stage}),
-        item: {stage},
-        end: (monitor) => {
-            const dragSource = monitor.getItem();
-            console.log(dragSource);
+        drop: (draggedTodo) => {
+            onDrop(draggedTodo.todo, stage)
+            return {draggedTodo};
         },
-        collect: monitor => ({
-            isOver: !!monitor.isOver(),
-        })
+        collect: (monitor) => {
+            return {isOver: !!monitor.isOver()}
+        }
     }), [])
 
     useEffect(() => {
@@ -35,7 +33,7 @@ function Stage(props) {
     }
 
     return stageTodos ? (
-        <div ref={drop} className='todo-stage'>
+        <div ref={drop} className={isOver ? 'todo-stage-drag' : 'todo-stage'}>
             <div className='stage-name'>{stage} {stageTodos.length > 0 ? `(${stageTodos.length})` : ''}</div>
             <button className='edit-stage-button' type='button'>•••</button>
             {stageTodos.map((todo) => <Todo user={user} key={todo.id} todo={todo} setTodos={setTodos} />)}
