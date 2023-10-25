@@ -11,7 +11,7 @@ function Todos(props) {
 
     useEffect(() => {
         const getTodos = async () => {
-            const response = await fetch(`/api/todo/${user}`);
+            const response = await fetch(`/api/todos/${user}`);
             const data = await response.json();
             setTodos(data.todos);
 
