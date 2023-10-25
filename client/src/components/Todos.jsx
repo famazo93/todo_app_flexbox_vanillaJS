@@ -1,5 +1,7 @@
 import Stage from './Stage';
 import {useState, useEffect} from 'react';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import TodoInput from './TodoInput';
 
 function Todos(props) {
@@ -29,13 +31,20 @@ function Todos(props) {
         getTodos();
     }, [user])
 
+    const handleDrop = async (droppedTodo, stage) => {
+        droppedTodo.stage = stage;
+        setTodos([...todos.filter(todo => todo.id !== droppedTodo.id), droppedTodo]);
+    }
+
     return todos ? (
-        <div className="todos-container" id="container-field">
-            <TodoInput stages={stages} setTodos={setTodos} />
-            <div className='new-todos'>    
-                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} setTodos={setTodos} stages={stages} setStages={setStages} />)}
+        <DndProvider backend={HTML5Backend}>
+            <div className="todos-container" id="container-field">
+                <TodoInput stages={stages} setTodos={setTodos} />
+                <div className='new-todos'>    
+                    {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} setTodos={setTodos} stages={stages} setStages={setStages} onDrop={handleDrop}/>)}
+                </div>
             </div>
-        </div>
+        </DndProvider>
     ) : (
         <div className="todos-container" id="container-field">
             <TodoInput stages={stages} setTodos={setTodos} />
