@@ -1,5 +1,7 @@
 import Stage from './Stage';
 import {useState, useEffect} from 'react';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import TodoInput from './TodoInput';
 
 function Todos(props) {
@@ -30,12 +32,14 @@ function Todos(props) {
     }, [user])
 
     return todos ? (
-        <div className="todos-container" id="container-field">
-            <TodoInput stages={stages} setTodos={setTodos} />
-            <div className='new-todos'>    
-                {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} setTodos={setTodos} stages={stages} setStages={setStages} />)}
+        <DndProvider backend={HTML5Backend}>
+            <div className="todos-container" id="container-field">
+                <TodoInput stages={stages} setTodos={setTodos} />
+                <div className='new-todos'>    
+                    {stages.map((stage) => <Stage key={stage} stage={stage} user={user} todos={todos} setTodos={setTodos} stages={stages} setStages={setStages} />)}
+                </div>
             </div>
-        </div>
+        </DndProvider>
     ) : (
         <div className="todos-container" id="container-field">
             <TodoInput stages={stages} setTodos={setTodos} />

@@ -432,11 +432,16 @@ button {
   border-radius: 10px;
   margin: 5px;
   padding: 15px;
-  text-align: left;
+}
+
+.todo-inner-container {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: space-between;
+  text-align: left;
 }
 
 .todo-title {
