@@ -15,7 +15,7 @@ function LoginForm() {
             }
         };
 
-        const response = await fetch('/api/authentication', {
+        const response = await fetch('/api/users/authentication', {
             method: "POST",
             body: JSON.stringify(userToCheck),
             headers: {
