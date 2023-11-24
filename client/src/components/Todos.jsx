@@ -7,7 +7,7 @@ import TodoInput from './TodoInput';
 function Todos(props) {
     const {user} = props;
     const [todos, setTodos] = useState(null);
-    const [stages, setStages] = useState(['To Start', 'In Progress', 'Done', 'Your stage']);
+    const [stages, setStages] = useState(['Your stage']);
 
     useEffect(() => {
         const getTodos = async () => {
